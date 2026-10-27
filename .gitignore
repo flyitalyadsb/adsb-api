@@ -1,0 +1,24 @@
+# Your API key never goes in git. Keep it in an environment variable or in one of these files.
+.env
+.env.*
+!.env.example
+*.key
+api-key.txt
+examples/esp32/planes-overhead/secrets.h
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Node
+node_modules/
+
+# Arduino / PlatformIO builds
+build/
+.pio/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
