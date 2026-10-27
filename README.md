@@ -60,7 +60,7 @@ Base URL `https://api.flyitalyadsb.com/v2`. Every request carries the key in the
 | `/events?lat=&lon=&dist=` | Emergencies, military and other notable traffic in an area, up to 7 days back |
 | `POST /webhooks` | The same events pushed to your URL, signed (paid plans) |
 
-Coming from ADSBx v2, adsb.lol or airplanes.live? The records and most route names are the same. Here the radius is in **kilometres**, `/icao`, `/callsign` and `/reg` return the aircraft object rather than a list, and `now` is in seconds. Details: [migration notes](https://flyitalyadsb.com/en/data/api/docs/endpoints/?utm_source=github&utm_campaign=adsb-api#coming-from-adsbx-v2-adsblol-or-airplaneslive).
+Coming from ADSBx v2? The records and most route names are the same. Here the radius is in **kilometres**, `/icao`, `/callsign` and `/reg` return the aircraft object rather than a list, and `now` is in seconds. Details: [migration notes](https://flyitalyadsb.com/en/data/api/docs/endpoints/?utm_source=github&utm_campaign=adsb-api#coming-from-adsbx-v2-adsblol-or-airplaneslive).
 
 ## What people build with it
 
