@@ -150,7 +150,7 @@ bool fetchPlanes() {
 }
 
 void show() {
-  char alt[12];
+  char alt[24];
   Serial.printf("\n%d aircraft within %.0f km\n", shownTotal, RADIUS_KM);
   for (int i = 0; i < planeCount; i++) {
     if (planes[i].altFt == LONG_MIN) strlcpy(alt, "ground", sizeof alt);

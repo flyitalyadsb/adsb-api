@@ -1,6 +1,6 @@
 # Free ADS-B flight tracking API: FlyItalyADSB
 
-**Live aircraft positions as JSON, for any point on Earth.** One `curl` returns every aircraft within a radius of a point (position, altitude, speed, callsign, registration, type, squawk, military/PIA/LADD flags), from a community network of about 3,200 ADS-B and MLAT receivers. The key is free and self-serve, and commercial use is allowed within the Free plan's limits.
+**Live aircraft positions as JSON, for any point on Earth.** One `curl` returns every aircraft within a radius of a point (position, altitude, speed, callsign, registration, type, squawk, military/PIA/LADD flags), from a community network of about 3,200 ADS-B and MLAT receivers. The key is free and self-serve, and commercial use is allowed on every plan, Free included, within its limits.
 
 [Get a free API key](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key) ·
 [API docs](https://flyitalyadsb.com/en/data/api/docs/?utm_source=github&utm_campaign=adsb-api) ·
@@ -46,7 +46,7 @@ curl -H "X-Api-Key: $FLYITALYADSB_API_KEY" \
 
 ## Endpoints
 
-Base URL `https://api.flyitalyadsb.com/v2`. Every request is a `GET` with the key in the `X-Api-Key` header and answers JSON. The machine-readable description is [openapi/openapi.json](openapi/openapi.json) (OpenAPI 3.1).
+Base URL `https://api.flyitalyadsb.com/v2`. Every request carries the key in the `X-Api-Key` header and gets JSON back; all are `GET` except webhook management. The machine-readable description is [openapi/openapi.json](openapi/openapi.json) (OpenAPI 3.1).
 
 | Endpoint | Returns |
 | --- | --- |
@@ -69,7 +69,7 @@ Coming from ADSBx v2, adsb.lol or airplanes.live? The records and most route nam
 - **Drones and search-and-rescue awareness**: what's flying low nearby. Read the [drones guide](https://flyitalyadsb.com/en/data/products/drones/?utm_source=github&utm_campaign=adsb-api) first. This is not a certified tool and never for collision avoidance.
 - **OSINT and military traffic**: unfiltered data, military aircraft included (many via MLAT), `/mil`, `/events`.
 - **Aircraft noise monitoring**: `/overflights` answers "what flew over this address between 6 and 7 am", with the closest distance and the lowest altitude. See [overflights.py](examples/python/overflights.py).
-- **Helicopter tracking**: rotorcraft carry `category: "A7"`, or query a type such as `/type/EC35`.
+- **Helicopter tracking**: rotorcraft that broadcast an emitter category carry `category: "A7"`; or query a type such as `/type/EC35`.
 
 ## Examples
 
@@ -140,37 +140,47 @@ If space is tight: `Data: flyitalyadsb.com (CC BY-SA 4.0)`. Your app's code, art
 
 ## FAQ
 
-**Can I use it in a product I sell?**
+### Can I use it in a product I sell?
+
 Yes, on every plan, Free included, within the plan's limits: apps, devices, websites and services, paid ones too. No separate agreement is needed. One is only needed to resell the data as an API or feed for other people's products.
 
-**One key per device, or one per product? Can my server cache the data?**
+### One key per device, or one per product? Can my server cache the data?
+
 One key per product. Requests from all your devices, users and servers count together on it, from any IP. A key inside firmware or an app can be extracted, so from a few dozen units let your own server fetch once and serve your devices ([cache_server.py](examples/python/cache_server.py)). A caching server that serves only your own users is fine on every plan; it is not redistribution.
 
-**What does the licence require?**
+### What does the licence require?
+
 A credit line with the licence: `Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0`. See [Licence and credit](#licence-and-credit).
 
-**What's the coverage in my area?**
+### What's the coverage in my area?
+
 Check it with the [coverage tool](https://flyitalyadsb.com/en/data/coverage/?utm_source=github&utm_campaign=adsb-api) or its keyless JSON (see [Coverage](#coverage)), or try a request with a Free key.
 
-**Which plan do I need, and what happens over the limit?**
+### Which plan do I need, and what happens over the limit?
+
 Size it as requests per minute per device × devices, and pick by radius: Free up to 500 km, Starter up to 1,000 km, Pro and Business the whole world. One device asking every 30 seconds makes 86,400 requests a month (Free covers three of them); a server fetching the whole world every 30 seconds for any number of users is also 86,400 a month, on Pro. Over a limit you get 429 or 403, never a bill. More worked examples: [plan and limits](https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api#plan).
 
-**Are routes, military aircraft and squawk codes in the data?**
+### Are routes, military aircraft and squawk codes in the data?
+
 - Routes (departure and arrival airports), airlines, schedules and photos: **no**. For those you need another source.
 - Military: **yes**. The data is unfiltered: military, PIA and LADD aircraft are flagged, not hidden. `dbFlags & 1` marks military (2 interesting, 4 PIA, 8 LADD), and `/mil` lists them all.
 - Squawk: **yes**, `squawk` on every record that transmits one, and `/sqk/7700` finds emergencies network-wide.
 - Registration and ICAO type are present for about 99% of aircraft.
 
-**Is there history?**
+### Is there history?
+
 Yes, self-serve with the same key: per-aircraft daily tracks since 2022 (with gaps; every day since 2026-08-17) and overflights of a place since 2026-08-17. See [history](https://flyitalyadsb.com/en/data/api/docs/history/?utm_source=github&utm_campaign=adsb-api).
 
-**Can I call it from a web page?**
+### Can I call it from a web page?
+
 CORS is open, but a key in a web page is public. Call the API from your server.
 
-**I get an HTML page ("Attention Required", error 1010 or 1020) instead of JSON.**
+### I get an HTML page ("Attention Required", error 1010 or 1020) instead of JSON.
+
 The request was stopped before the API. Always send `X-Api-Key`, and send a `User-Agent` of your own (your app's name). If it goes on, see [limits and errors](https://flyitalyadsb.com/en/data/api/docs/limits-and-errors/?utm_source=github&utm_campaign=adsb-api#blocked-by-cloudflare).
 
-**How does it compare with other ADS-B APIs?**
+### How does it compare with other ADS-B APIs?
+
 See the factual [ADS-B API comparison](https://flyitalyadsb.com/en/data/comparison/?utm_source=github&utm_campaign=adsb-api): rate limits, feeder requirements and commercial-use terms of each.
 
 More answers in the [FAQ](https://flyitalyadsb.com/en/faq/?utm_source=github&utm_campaign=adsb-api).
