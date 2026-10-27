@@ -9,7 +9,8 @@ For noise complaints, helicopter logs and "what was that plane at 7 am?".
     python3 overflights.py 45.46 9.19 --from 2026-10-26T06:00:00Z --to 2026-10-26T09:00:00Z
 
 Covers every day since 2026-08-17 and today up to about 10 minutes ago.
-Plan limits: Free 10 km / 6 h per request, Starter 25 km / 24 h, Pro and Business 50 km / 24 h.
+The radius and time window allowed per request depend on the plan (see /v2/overflights in
+openapi/openapi.json); the defaults here fit the Free plan.
 Python 3.8+, standard library only.
 Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0
 """

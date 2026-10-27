@@ -1,6 +1,6 @@
 # FlyItalyADSB API (flyitalyadsb/adsb-api)
 
-> Free, self-serve ADS-B flight tracking REST API: live aircraft positions as JSON for any point on Earth, from a community network of about 3,200 ADS-B/MLAT receivers (born in Italy in 2020, receivers all over the world, densest in North America and Europe). Free key by email in seconds; commercial use allowed on every plan within its limits, Free included. Data licence CC BY-SA 4.0. This repository holds working examples (curl, Python, Node.js, ESP32), a copy of the OpenAPI 3.1 spec and this summary.
+> Free, self-serve ADS-B flight tracking REST API: live aircraft positions as JSON for any point on Earth, from a community network of <!-- sync:receivers:start -->about 3,200<!-- sync:receivers:end --> ADS-B/MLAT receivers (born in Italy in 2020, receivers all over the world, densest in North America and Europe). Free key by email in seconds; commercial use allowed on every plan within its limits, Free included. Data licence CC BY-SA 4.0. This repository holds working examples (curl, Python, Node.js, ESP32), a copy of the OpenAPI 3.1 spec and this summary.
 
 ## Essentials
 
@@ -10,14 +10,15 @@
 - Other endpoints: `/icao/{hex}`, `/callsign/{callsign}`, `/reg/{reg}` (one aircraft object, 404 if not seen now), `/mil`, `/pia`, `/ladd`, `/sqk/{squawk}`, `/type/{type}`, `/profile/{icao}`, `/history/{icao}[/{YYYY-MM-DD}]`, `/overflights?lat=&lon=&dist=&from=&to=`, `/events?lat=&lon=&dist=`, `POST /webhooks` (paid plans).
 - Not in the data: routes (departure/arrival airports), airlines, schedules, photos. Unfiltered: military, PIA and LADD aircraft are flagged, not hidden.
 - Freshness: rebuilt every 2 s, API reloads at most every 3 s; positions older than ~60 s are not returned.
+<!-- sync:coverage:start -->
+- Where the receivers are: of those that share their position, about 36% are in the United States, 15% in Germany, 11% in the UK and Ireland and 16% in the rest of Europe; Asia, Australia and New Zealand follow; Latin America and Africa are thinner; Italy is about 3% (October 2026).
+<!-- sync:coverage:end -->
 - Coverage check without a key: `GET https://api.flyitalyadsb.com/api/coverage?lat=&lon=&radius=` (25/50/100/200 km, 30 requests/min per IP; send a User-Agent of your own), or https://flyitalyadsb.com/en/data/coverage/?utm_source=github&utm_campaign=adsb-api
 
 ## Plans (prices before tax, monthly)
 
-- Free: €0, 30 requests/min per key, 300,000/month, radius up to 500 km. Also 100 requests/min per IP.
-- Starter: €9, 60/min, 1,000,000/month, up to 1,000 km.
-- Pro: €49, 300/min, 10,000,000/month, whole world in one request (`/lat/0/lon/0/dist/20040`).
-- Business: €249, 1,000/min, 50,000,000/month, whole world.
+<!-- sync:plans:start -->
+<!-- sync:plans:end -->
 - Over a limit: 429 (Retry-After) or 403 (radius); refused requests are not counted and never billed. No SLA on any plan; paid plans help cover server and bandwidth costs.
 - Feeders (people who run a receiver for the network) get Pro limits on their Free keys at no cost, for non-commercial use: https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api
 - Reselling the data as an API or feed for other people's products, an SLA, or volume beyond Business: https://flyitalyadsb.com/en/contact/?utm_source=github&utm_campaign=adsb-api

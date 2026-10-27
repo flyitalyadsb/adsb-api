@@ -41,14 +41,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "18"
-      - name: Python examples compile on 3.8 (the oldest the examples support)
-        run: python -m py_compile examples/python/*.py scripts/*.py
-      - name: Node example parses on Node 18
-        run: node --check examples/node/near.mjs
-      - name: Shell example passes shellcheck
-        run: shellcheck examples/curl.sh
-      - name: OpenAPI copy is valid JSON and OpenAPI 3
-        run: python -c "import json,sys; d=json.load(open('openapi/openapi.json')); sys.exit(0 if str(d['openapi']).startswith('3.') else 'not OpenAPI 3')"
+      - name: Offline checks (Python 3.8 and Node 18, the oldest the examples support)
+        run: sh scripts/checks.sh
 
   esp32:
     runs-on: ubuntu-latest

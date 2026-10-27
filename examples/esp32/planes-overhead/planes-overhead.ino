@@ -8,7 +8,7 @@
 // 1. Copy secrets.example.h to secrets.h and fill it in (free key, Wi-Fi, your position).
 // 2. Upload, open the serial monitor at 115200 baud.
 //
-// Requests: one every 30 s = 86,400 a month, within the Free plan (300,000/month).
+// Requests: one every 30 s = 86,400 a month (plans and quotas: see the repository README).
 // Selling these? Use one key for the whole product: every unit counts on it. From a few
 // dozen units, let your own server fetch once and the units ask it
 // (see examples/python/cache_server.py). The feeder perk does not cover units you sell.

@@ -8,8 +8,8 @@ the key never leaves your server. This is allowed on every plan: it serves only
 your own product's users.
 
     export FLYITALYADSB_API_KEY=...
-    python3 cache_server.py                         # 500 km around 51.5, -0.1 (Free plan maximum)
-    AREA=0,0,20040 python3 cache_server.py          # the whole world (Pro and Business)
+    python3 cache_server.py                         # 500 km around 51.5, -0.1 (fits the Free plan)
+    AREA=0,0,20040 python3 cache_server.py          # the whole world (plans without a radius limit)
     curl "localhost:8080/near?lat=51.47&lon=-0.45&km=15"
 
 Python 3.8+, standard library only.

@@ -34,7 +34,7 @@ arduino-cli upload  --fqbn esp32:esp32:esp32 -p /dev/ttyUSB0 examples/esp32/plan
 
 ## How many requests
 
-One request every 30 seconds is 86,400 a month: the Free plan (300,000 a month) covers three such displays on one key. A 15 km radius answers in about 11 KB around Heathrow; the sketch reads the answer as a stream and keeps only the five fields it shows, so RAM use stays small. Change `RADIUS_KM`, `EVERY_MS` and `SHOW_GROUND` at the top of the sketch; the data itself refreshes every 2 seconds.
+One request every 30 seconds is 86,400 requests a month: compare it with your plan's monthly quota in the [plans table](../../../README.md#plans-and-limits). A 15 km radius answers in about 11 KB around Heathrow; the sketch reads the answer as a stream and keeps only the five fields it shows, so RAM use stays small. Change `RADIUS_KM`, `EVERY_MS` and `SHOW_GROUND` at the top of the sketch; the data itself refreshes every 2 seconds.
 
 On a `429` the sketch waits the `Retry-After` seconds. Refused requests are not counted.
 

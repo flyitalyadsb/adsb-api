@@ -1,6 +1,6 @@
 # Free ADS-B flight tracking API: FlyItalyADSB
 
-**Live aircraft positions as JSON, for any point on Earth.** One `curl` returns every aircraft within a radius of a point (position, altitude, speed, callsign, registration, type, squawk, military/PIA/LADD flags), from a community network of about 3,200 ADS-B and MLAT receivers. The key is free and self-serve, and commercial use is allowed on every plan, Free included, within its limits.
+**Live aircraft positions as JSON, for any point on Earth.** One `curl` returns every aircraft within a radius of a point (position, altitude, speed, callsign, registration, type, squawk, military/PIA/LADD flags), from a community network of <!-- sync:receivers:start -->about 3,200<!-- sync:receivers:end --> ADS-B and MLAT receivers. The key is free and self-serve, and commercial use is allowed on every plan, Free included, within its limits.
 
 [Get a free API key](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key) ·
 [API docs](https://flyitalyadsb.com/en/data/api/docs/?utm_source=github&utm_campaign=adsb-api) ·
@@ -92,7 +92,12 @@ python3 examples/python/near_me.py 40.64 -73.78 -r 50     # 50 km around New Yor
 
 ## Coverage
 
-The network is global: born in Italy in 2020, with receivers all over the world. The API answers for any point on Earth. Of the receivers that share their position, about 36% are in the United States, 15% in Germany, 11% in the UK and Ireland and 16% in the rest of Europe; Asia, Australia and New Zealand follow; Latin America and Africa are thinner; Italy is about 3% (October 2026). On top of plain ADS-B, the network's own multilateration (MLAT) locates aircraft that don't broadcast a position, many military ones included.
+The network is global: born in Italy in 2020, with receivers all over the world. The API answers for any point on Earth.
+<!-- sync:coverage:start -->
+Of the receivers that share their position, about 36% are in the United States, 15% in Germany, 11% in the UK and Ireland and 16% in the rest of Europe; Asia, Australia and New Zealand follow; Latin America and Africa are thinner; Italy is about 3% (October 2026).
+<!-- sync:coverage:end -->
+
+On top of plain ADS-B, the network's own multilateration (MLAT) locates aircraft that don't broadcast a position, many military ones included.
 
 Check your area before you build on it:
 
@@ -109,6 +114,9 @@ Freshness: the picture is rebuilt every 2 seconds and the API reloads it at most
 
 FlyItalyADSB is a community project. The map and the Free plan stay free, commercial use included, within their limits. Paid plans are for heavy API users and help cover the cost of servers and bandwidth. A paid plan raises the limits of the key you already have.
 
+Choose mostly by area: each request asks for the aircraft in a circle, and the largest circle depends on the plan.
+
+<!-- sync:plans:start -->
 | Plan | Price | Requests/min (per key) | Requests/month | Radius per request |
 | --- | --- | --- | --- | --- |
 | Free | €0 | 30 | 300,000 | up to 500 km |
@@ -116,9 +124,12 @@ FlyItalyADSB is a community project. The map and the Free plan stay free, commer
 | Pro | €49/month + tax | 300 | 10,000,000 | whole world |
 | Business | €249/month + tax | 1,000 | 50,000,000 | whole world |
 
-- Choose mostly by area: the whole world in one request (`/lat/0/lon/0/dist/20040`) needs Pro or Business.
+- The Free plan also has a cap of 100 requests a minute per IP.
+- The whole world in one request (`/lat/0/lon/0/dist/20040`) needs Pro or Business.
+<!-- sync:plans:end -->
+
 - Over a limit you get `429` (with `Retry-After`) or `403` for too large a radius. Refused requests are not counted and nothing is ever billed beyond the plan.
-- The Free plan also has a cap of 100 requests a minute per IP. The monthly counter resets on the 1st.
+- The monthly counter resets on the 1st.
 - Every response carries `X-FIA-Plan`, `X-FIA-Limit-Per-Min`, `X-FIA-Quota-Month` and `X-FIA-Used-Month`.
 - No plan includes an SLA or guaranteed response times; the service is best effort.
 - **Run a receiver?** Feeders get Pro limits on their Free keys at no cost, for non-commercial use. It's how the network grows: [become a feeder](https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api), then turn the perk on in [My API](https://flyitalyadsb.com/en/data/api/account/?utm_source=github&utm_campaign=adsb-api).
@@ -158,7 +169,7 @@ Check it with the [coverage tool](https://flyitalyadsb.com/en/data/coverage/?utm
 
 ### Which plan do I need, and what happens over the limit?
 
-Size it as requests per minute per device × devices, and pick by radius: Free up to 500 km, Starter up to 1,000 km, Pro and Business the whole world. One device asking every 30 seconds makes 86,400 requests a month (Free covers three of them); a server fetching the whole world every 30 seconds for any number of users is also 86,400 a month, on Pro. Over a limit you get 429 or 403, never a bill. More worked examples: [plan and limits](https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api#plan).
+Pick by radius first, then size the volume as requests per minute per device × devices, and compare with the [plans table](#plans-and-limits). One device asking every 30 seconds makes 86,400 requests a month; a server fetching once every 30 seconds for any number of users is also 86,400 a month. Over a limit you get 429 or 403, never a bill. More worked examples: [plan and limits](https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api#plan).
 
 ### Are routes, military aircraft and squawk codes in the data?
 
@@ -200,13 +211,17 @@ Tools: `find_aircraft`, `aircraft_near`, `special_traffic`, `aircraft_history`, 
 
 For agents and LLMs: [`llms.txt`](llms.txt) in this repository summarises the API, and the site publishes [its own](https://flyitalyadsb.com/llms.txt) plus an [API catalog](https://flyitalyadsb.com/.well-known/api-catalog).
 
-## Keeping the spec current
+## Kept in sync with the live API
 
-[`openapi/openapi.json`](openapi/openapi.json) is a pretty-printed copy of the spec the API publishes at `https://flyitalyadsb.com/openapi.json`, which is the source of truth.
+This repository keeps itself in sync with the live API and site. Every day the [sync workflow](.github/workflows/sync.yml) runs [`scripts/sync.py`](scripts/sync.py), which:
+
+- copies the published spec, `https://flyitalyadsb.com/openapi.json`, into [`openapi/openapi.json`](openapi/openapi.json) (pretty-printed, so changes diff cleanly);
+- regenerates the parts of this README and of [`llms.txt`](llms.txt) between `<!-- sync:… -->` markers (plans and limits, receiver count and coverage shares) from the live site;
+- checks that every endpoint, parameter and field the examples use is still in the spec, and that the examples' default radii still fit the Free plan;
+- commits only if something changed, and fails without committing if anything doesn't parse or a check fails.
 
 ```bash
-python3 scripts/refresh_openapi.py          # update the copy
-python3 scripts/refresh_openapi.py --check  # exit 1 if it is out of date
+python3 scripts/sync.py --dry-run   # what would change; exit 1 if the repo is out of date
 ```
 
 ## Links
