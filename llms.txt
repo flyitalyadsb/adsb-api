@@ -1,0 +1,51 @@
+# FlyItalyADSB API (flyitalyadsb/adsb-api)
+
+> Free, self-serve ADS-B flight tracking REST API: live aircraft positions as JSON for any point on Earth, from a community network of about 3,200 ADS-B/MLAT receivers (born in Italy in 2020, receivers all over the world, densest in North America and Europe). Free key by email in seconds; commercial use allowed on every plan within its limits, Free included. Data licence CC BY-SA 4.0. This repository holds working examples (curl, Python, Node.js, ESP32), a copy of the OpenAPI 3.1 spec and this summary.
+
+## Essentials
+
+- Base URL: `https://api.flyitalyadsb.com/v2`. Auth: header `X-Api-Key: <key>` on every request. JSON responses.
+- Get a key: https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key (email only, no approval; the same key works for the MCP server).
+- Main call: `GET /v2/lat/{lat}/lon/{lon}/dist/{km}` returns `{"now": <unix seconds>, "count", "total", "ac": [ ... ]}`, every aircraft within `km` kilometres (not nautical miles) of the point. Records are readsb aircraft.json: `hex`, `flight` (callsign, space-padded), `r` (registration), `t` (ICAO type), `lat`, `lon`, `alt_baro` (feet, or "ground"), `alt_geom`, `gs` (knots), `track`, `baro_rate` (ft/min), `squawk`, `category`, `dbFlags` (1 military, 2 interesting, 4 PIA, 8 LADD), `type` (position source: adsb_icao, mlat, ...), `seen_pos` (seconds).
+- Other endpoints: `/icao/{hex}`, `/callsign/{callsign}`, `/reg/{reg}` (one aircraft object, 404 if not seen now), `/mil`, `/pia`, `/ladd`, `/sqk/{squawk}`, `/type/{type}`, `/profile/{icao}`, `/history/{icao}[/{YYYY-MM-DD}]`, `/overflights?lat=&lon=&dist=&from=&to=`, `/events?lat=&lon=&dist=`, `POST /webhooks` (paid plans).
+- Not in the data: routes (departure/arrival airports), airlines, schedules, photos. Unfiltered: military, PIA and LADD aircraft are flagged, not hidden.
+- Freshness: rebuilt every 2 s, API reloads at most every 3 s; positions older than ~60 s are not returned.
+- Coverage check without a key: `GET https://api.flyitalyadsb.com/api/coverage?lat=&lon=&radius=` (25/50/100/200 km, 30 requests/min per IP; send a User-Agent of your own), or https://flyitalyadsb.com/en/data/coverage/?utm_source=github&utm_campaign=adsb-api
+
+## Plans (prices before tax, monthly)
+
+- Free: €0, 30 requests/min per key, 300,000/month, radius up to 500 km. Also 100 requests/min per IP.
+- Starter: €9, 60/min, 1,000,000/month, up to 1,000 km.
+- Pro: €49, 300/min, 10,000,000/month, whole world in one request (`/lat/0/lon/0/dist/20040`).
+- Business: €249, 1,000/min, 50,000,000/month, whole world.
+- Over a limit: 429 (Retry-After) or 403 (radius); refused requests are not counted and never billed. No SLA on any plan; paid plans help cover server and bandwidth costs.
+- Feeders (people who run a receiver for the network) get Pro limits on their Free keys at no cost, for non-commercial use: https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api
+- Reselling the data as an API or feed for other people's products, an SLA, or volume beyond Business: https://flyitalyadsb.com/en/contact/?utm_source=github&utm_campaign=adsb-api
+- Current plans: https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#piani
+
+## Using it in a product
+
+- Allowed on every plan, Free included, in apps and devices you sell. One key per product: all devices, users and servers count on it.
+- Your own server may fetch and cache the data to serve your own users (not redistribution). Keep the key on your server when you can: a key in firmware or a web page can be extracted.
+- Credit where users see the data: "Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0". Your code, artwork and design stay yours.
+- Rules as Q&A: https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api
+- Terms: https://flyitalyadsb.com/en/terms/?utm_source=github&utm_campaign=adsb-api
+
+## AI assistants (MCP)
+
+- MCP server: `https://flyitalyadsb.com/mcp` (Streamable HTTP), official MCP registry name `com.flyitalyadsb/mcp`. OAuth for claude.ai-style connectors, or `X-Api-Key` with the same key.
+- Tools: find_aircraft, aircraft_near, special_traffic, aircraft_history, aircraft_profile, overflights, notable_traffic, set_my_location, clear_my_location. Each call counts as one request.
+- Guide: https://flyitalyadsb.com/en/data/mcp/?utm_source=github&utm_campaign=adsb-api
+
+## In this repository
+
+- [README](README.md): quickstart, endpoints, plans, licence, FAQ.
+- [examples/curl.sh](examples/curl.sh), [examples/python/quickstart.py](examples/python/quickstart.py), [examples/python/near_me.py](examples/python/near_me.py), [examples/python/overflights.py](examples/python/overflights.py), [examples/python/cache_server.py](examples/python/cache_server.py), [examples/node/near.mjs](examples/node/near.mjs), [examples/esp32/planes-overhead/](examples/esp32/planes-overhead/)
+- [openapi/openapi.json](openapi/openapi.json): copy of https://flyitalyadsb.com/openapi.json (the source of truth).
+
+## More
+
+- API documentation: https://flyitalyadsb.com/en/data/api/docs/?utm_source=github&utm_campaign=adsb-api
+- ADS-B API comparison (rate limits, feeder requirements, commercial terms of the open ADS-B APIs): https://flyitalyadsb.com/en/data/comparison/?utm_source=github&utm_campaign=adsb-api
+- FAQ: https://flyitalyadsb.com/en/faq/?utm_source=github&utm_campaign=adsb-api
+- The site's own llms.txt: https://flyitalyadsb.com/llms.txt

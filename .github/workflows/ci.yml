@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"  # weekly: the TLS roots check can break without any commit here
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Secret scan over the history of the commit under test. The gitleaks CLI needs no
+  # licence (the gitleaks action does, for organisations).
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        run: |
+          VER=8.21.2
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${VER}/gitleaks_${VER}_linux_x64.tar.gz" | tar -xz gitleaks
+          ./gitleaks detect --source . --redact -v --no-banner --exit-code 1 \
+            --log-opts="${{ github.event.pull_request.head.sha || github.sha }}"
+
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Python examples compile on 3.8 (the oldest the examples support)
+        run: python -m py_compile examples/python/*.py scripts/*.py
+      - name: Node example parses on Node 18
+        run: node --check examples/node/near.mjs
+      - name: Shell example passes shellcheck
+        run: shellcheck examples/curl.sh
+      - name: OpenAPI copy is valid JSON and OpenAPI 3
+        run: python -c "import json,sys; d=json.load(open('openapi/openapi.json')); sys.exit(0 if str(d['openapi']).startswith('3.') else 'not OpenAPI 3')"
+
+  esp32:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        oled: ["0", "1"]
+    name: esp32 (USE_OLED=${{ matrix.oled }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/compile-sketches@v1
+        with:
+          fqbn: esp32:esp32:esp32
+          platforms: |
+            - name: esp32:esp32
+              source-url: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          libraries: |
+            - name: ArduinoJson
+            - name: Adafruit SSD1306
+            - name: Adafruit GFX Library
+          sketch-paths: |
+            - examples/esp32/planes-overhead
+          cli-compile-flags: |
+            - --build-property
+            - compiler.cpp.extra_flags=-DUSE_OLED=${{ matrix.oled }}
+          enable-deltas-report: false
+
+  # The ESP32 sketch trusts only the roots in root_ca.h: make sure they still validate
+  # the API's live certificate chain.
+  tls-roots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: root_ca.h validates api.flyitalyadsb.com
+        run: |
+          python3 - <<'EOF'
+          import re
+          src = open("examples/esp32/planes-overhead/root_ca.h").read()
+          pem = "".join(bytes(s, "ascii").decode("unicode_escape") for s in re.findall(r'"([^"]*)"', src))
+          open("roots.pem", "w").write(pem)
+          print(pem.count("BEGIN CERTIFICATE"), "roots")
+          EOF
+          echo | openssl s_client -connect api.flyitalyadsb.com:443 -servername api.flyitalyadsb.com \
+            -CAfile roots.pem -verify_return_error 2>&1 | tee out.txt | grep -E "^(depth|verify)" || true
+          grep -q "Verify return code: 0 (ok)" out.txt
