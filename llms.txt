@@ -18,6 +18,12 @@
 ## Plans (prices before tax, monthly)
 
 <!-- sync:plans:start -->
+- Free: €0/month, 30 requests/min per key, 300,000 requests/month, radius up to 500 km.
+- Starter: €9/month, 60 requests/min per key, 1,000,000 requests/month, radius up to 1,000 km.
+- Pro: €49/month, 300 requests/min per key, 10,000,000 requests/month, no radius limit (the whole world).
+- Business: €249/month, 1,000 requests/min per key, 50,000,000 requests/month, no radius limit (the whole world).
+- The Free plan also has a cap of 100 requests/min per IP.
+- Whole world in one request (`/lat/0/lon/0/dist/20040`): Pro or Business.
 <!-- sync:plans:end -->
 - Over a limit: 429 (Retry-After) or 403 (radius); refused requests are not counted and never billed. No SLA on any plan; paid plans help cover server and bandwidth costs.
 - Feeders (people who run a receiver for the network) get Pro limits on their Free keys at no cost, for non-commercial use: https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api
