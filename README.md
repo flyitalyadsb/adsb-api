@@ -60,7 +60,23 @@ Base URL `https://api.flyitalyadsb.com/v2`. Every request carries the key in the
 | `/events?lat=&lon=&dist=` | Emergencies, military and other notable traffic in an area, up to 7 days back |
 | `POST /webhooks` | The same events pushed to your URL, signed (paid plans) |
 
-Coming from ADSBx v2? The records and most route names are the same. Here the radius is in **kilometres**, `/icao`, `/callsign` and `/reg` return the aircraft object rather than a list, and `now` is in seconds. Details: [migration notes](https://flyitalyadsb.com/en/data/api/docs/endpoints/?utm_source=github&utm_campaign=adsb-api#migrating).
+### Coming from ADS-B Exchange?
+
+The same data is also served in its format, at `https://api.flyitalyadsb.com/api/aircraft/v2`:
+- the same paths: `/hex`, `/icao`, `/callsign`, `/registration`, `/sqk`, `/mil`, `/lat/{lat}/lon/{lon}/dist/{nm}`, `/point` and `/closest`;
+- the same key headers: `api-auth`, `X-RapidAPI-Key` or `X-Api-Key`;
+- the same JSON: `ac`, `msg`, `now` in milliseconds, `total`, `ctime`, `ptime`, radius in nautical miles, with `dst` and `dir`.
+
+Existing code only changes the host and the key:
+
+```diff
+- https://adsbexchange-com1.p.rapidapi.com/v2/lat/51.47/lon/-0.45/dist/25/
++ https://api.flyitalyadsb.com/api/aircraft/v2/lat/51.47/lon/-0.45/dist/25/
+```
+
+Same key, plans and limits as `/v2`. Details: [ADS-B Exchange v2 compatibility](https://flyitalyadsb.com/en/data/api/docs/adsbx-v2/?utm_source=github&utm_campaign=adsb-api).
+
+The `/v2` base above is our own format: radius in **kilometres**, `/icao`, `/callsign` and `/reg` return the aircraft object rather than a list, and `now` is in seconds. Details: [migration notes](https://flyitalyadsb.com/en/data/api/docs/endpoints/?utm_source=github&utm_campaign=adsb-api#migrating).
 
 ## What people build with it
 
@@ -192,7 +208,7 @@ The request was stopped before the API. Always send `X-Api-Key`, and send a `Use
 
 ### How does it compare with other ADS-B APIs?
 
-See the factual [ADS-B API comparison](https://flyitalyadsb.com/en/data/comparison/?utm_source=github&utm_campaign=adsb-api): rate limits, feeder requirements and commercial-use terms of each.
+See the factual [ADS-B API comparison](https://flyitalyadsb.com/en/data/comparison/?utm_source=github&utm_campaign=adsb-api): rate limits, feeder requirements and commercial-use terms of each. Code written for ADS-B Exchange works here unchanged in [its format](#coming-from-ads-b-exchange): change the host and the key.
 
 More answers in the [FAQ](https://flyitalyadsb.com/en/faq/?utm_source=github&utm_campaign=adsb-api).
 
