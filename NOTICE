@@ -1,0 +1,15 @@
+Code and data are licensed separately.
+
+The code in this repository (examples, scripts) is MIT licensed: see LICENSE.
+
+The flight data the API returns is NOT covered by the MIT licence. It is
+published under Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0)
+and served under the API terms of service:
+https://flyitalyadsb.com/en/terms/?utm_source=github&utm_campaign=adsb-api
+
+Credit it where your users see the data:
+
+    Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0
+
+openapi/openapi.json is a copy of https://flyitalyadsb.com/openapi.json,
+the API's own description, included for convenience.
