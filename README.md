@@ -9,7 +9,7 @@
 [Plans](#plans-and-limits) ·
 [FAQ](#faq) ·
 [MCP server for AI assistants](#use-it-from-an-ai-assistant-mcp) ·
-[Live map](https://mappa.flyitalyadsb.com/?utm_source=github&utm_campaign=adsb-api)
+[Live map](https://map.flyitalyadsb.com/?utm_source=github&utm_campaign=adsb-api)
 
 ```bash
 curl -H "X-Api-Key: $FLYITALYADSB_API_KEY" \
@@ -122,7 +122,7 @@ Check your area before you build on it:
   ```bash
   curl -A "my-app/1.0" "https://api.flyitalyadsb.com/api/coverage?lat=45.46&lon=9.19&radius=100"
   ```
-- or a request with a Free key, or a look at the [live map](https://mappa.flyitalyadsb.com/?utm_source=github&utm_campaign=adsb-api).
+- or a request with a Free key, or a look at the [live map](https://map.flyitalyadsb.com/?utm_source=github&utm_campaign=adsb-api).
 
 Freshness: the picture is rebuilt every 2 seconds and the API reloads it at most every 3; each aircraft carries `seen_pos`, and positions older than about 60 seconds are not returned.
 
