@@ -10,6 +10,7 @@ examples/esp32/planes-overhead/secrets.h
 __pycache__/
 *.py[cod]
 .venv/
+dist/
 
 # Node
 node_modules/

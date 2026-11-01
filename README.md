@@ -6,6 +6,7 @@
 [API docs](https://flyitalyadsb.com/en/data/api/docs/?utm_source=github&utm_campaign=adsb-api) ·
 [OpenAPI spec](openapi/openapi.json) ·
 [Examples](#examples) ·
+[Python client](python/README.md) ·
 [Plans](#plans-and-limits) ·
 [FAQ](#faq) ·
 [MCP server for AI assistants](#use-it-from-an-ai-assistant-mcp) ·
@@ -43,6 +44,24 @@ curl -H "X-Api-Key: $FLYITALYADSB_API_KEY" \
    }
    ```
    Altitudes are in feet (`alt_baro` is the string `"ground"` on the ground), speeds in knots, vertical rate in ft/min. `flight` is space-padded: trim it. Every field: [fields and units](https://flyitalyadsb.com/en/data/api/docs/fields/?utm_source=github&utm_campaign=adsb-api).
+
+## Python client
+
+The official Python client is in [`python/`](python/README.md), published on PyPI as `flyitalyadsb`: standard library only, typed, Python 3.9+.
+
+```bash
+pip install flyitalyadsb
+```
+
+```python
+from flyitalyadsb import Client
+
+client = Client()  # reads FLYITALYADSB_API_KEY
+for a in client.near(51.47, -0.45, 25):  # 25 km around London Heathrow
+    print(a.callsign, a.registration, a.icao_type, a.altitude)
+```
+
+One method per endpoint (`near`, `world`, `by_icao`, `military`, `squawk`, `history`, `profile`, `overflights`, `events`…), typed errors for the plan limits (403 and 429) and your usage from the `X-FIA-*` headers in `client.limits`. Details: [python/README.md](python/README.md).
 
 ## Endpoints
 
@@ -94,6 +113,7 @@ All examples read the key from the `FLYITALYADSB_API_KEY` environment variable a
 | Example | What it does |
 | --- | --- |
 | [`examples/curl.sh`](examples/curl.sh) | curl + jq: a radius, one aircraft by callsign, squawk 7700, military traffic, your usage headers, coverage of an area |
+| [`python/`](python/README.md) | The official Python client, `pip install flyitalyadsb` (standard library only) |
 | [`examples/python/quickstart.py`](examples/python/quickstart.py) | The smallest Python client (standard library) |
 | [`examples/python/near_me.py`](examples/python/near_me.py) | "Aircraft near me" CLI: nearest first, with distance and direction, `--watch` to refresh, handles 403/429 |
 | [`examples/python/overflights.py`](examples/python/overflights.py) | What flew over a place in a time window (noise, helicopters, "what was that?") |
@@ -163,7 +183,7 @@ Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0
 
 If space is tight: `Data: flyitalyadsb.com (CC BY-SA 4.0)`. Your app's code, artwork and design stay yours. The details are in [using the data in a product](https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api#licence) and the [terms of service](https://flyitalyadsb.com/en/terms/?utm_source=github&utm_campaign=adsb-api).
 
-**This repository:** the code (examples and scripts) is [MIT](LICENSE). The flight data the API returns is not MIT: it is CC BY-SA 4.0 under the API terms. See [NOTICE](NOTICE).
+**This repository:** the code (examples, scripts and the [Python client](python/)) is [MIT](LICENSE). The flight data the API returns is not MIT: it is CC BY-SA 4.0 under the API terms. See [NOTICE](NOTICE).
 
 ## FAQ
 

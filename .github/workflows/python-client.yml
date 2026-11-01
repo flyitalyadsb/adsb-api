@@ -1,0 +1,106 @@
+name: python-client
+
+# The Python client in python/ (published on PyPI as "flyitalyadsb").
+#
+# - Pull requests and pushes to main that touch python/: tests on every supported
+#   Python, then a build of the sdist and wheel checked with twine. No network in tests.
+# - A tag python-vX.Y.Z (X.Y.Z = python/src/flyitalyadsb/_version.py): the same, then
+#   the upload to PyPI with Trusted Publishing (OIDC). No PyPI token is stored here:
+#   PyPI trusts this workflow file, in the "pypi" environment, of this repository.
+
+on:
+  pull_request:
+    paths:
+      - "python/**"
+      - ".github/workflows/python-client.yml"
+  push:
+    branches: [main]
+    paths:
+      - "python/**"
+      - ".github/workflows/python-client.yml"
+    tags: ["python-v*"]  # path filters do not apply to tags
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: python-client-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+defaults:
+  run:
+    working-directory: python
+
+jobs:
+  test:
+    name: test (Python ${{ matrix.python }})
+    # 24.04: the newest image with a Python 3.9 build for setup-python.
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install the package and pytest
+        run: python -m pip install . "pytest>=8.4,<10"
+      - name: Tests (the live smoke test skips itself without FLYITALYADSB_API_KEY)
+        run: python -m pytest
+
+  build:
+    needs: test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97  # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Install build tools
+        run: python -m pip install "build==1.6.1" "twine==7.0.0" "mypy==2.4.1"
+      - name: Type check (strict)
+        run: python -m mypy
+      - name: Build the sdist and the wheel
+        run: python -m build
+      - name: Check the metadata and that the README renders on PyPI
+        run: python -m twine check --strict dist/*
+      - name: The tag matches the package version
+        if: startsWith(github.ref, 'refs/tags/python-v')
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version=$(python -c "import re, pathlib; print(re.search(r'__version__ = \"([^\"]+)\"', pathlib.Path('src/flyitalyadsb/_version.py').read_text()).group(1))")
+          if [ "$TAG" != "python-v$version" ]; then
+            echo "::error::tag $TAG does not match the package version $version (expected python-v$version)"
+            exit 1
+          fi
+          test -f "dist/flyitalyadsb-$version-py3-none-any.whl"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: python-dist
+          path: python/dist/
+          if-no-files-found: error
+
+  publish:
+    name: publish to PyPI
+    if: startsWith(github.ref, 'refs/tags/python-v')
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: pypi
+      url: https://pypi.org/project/flyitalyadsb/
+    permissions:
+      id-token: write  # Trusted Publishing: a short-lived OIDC token instead of a stored secret
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
+        with:
+          name: python-dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086  # v1.14.3
