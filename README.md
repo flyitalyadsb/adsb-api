@@ -144,7 +144,7 @@ Check your area before you build on it:
   ```
 - or a request with a Free key, or a look at the [live map](https://map.flyitalyadsb.com/?utm_source=github&utm_campaign=adsb-api).
 
-Freshness: the picture is rebuilt every 2 seconds and the API reloads it at most every 3; each aircraft carries `seen_pos`, and positions older than about 60 seconds are not returned.
+Freshness: the picture refreshes every half second, on the live map and in the API; each aircraft carries `seen_pos`, and positions older than about 60 seconds are not returned.
 
 ## Plans and limits
 
