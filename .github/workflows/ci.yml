@@ -32,7 +32,9 @@ jobs:
             --log-opts="${{ github.event.pull_request.head.sha || github.sha }}"
 
   examples:
-    runs-on: ubuntu-latest
+    # ubuntu-latest now resolves to Ubuntu 26.04, where setup-python has no build
+    # there yet for the Python versions these jobs use: pinned until it does.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -45,7 +47,9 @@ jobs:
         run: sh scripts/checks.sh
 
   esp32:
-    runs-on: ubuntu-latest
+    # ubuntu-latest now resolves to Ubuntu 26.04, where setup-python has no build
+    # there yet for the Python versions these jobs use: pinned until it does.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
