@@ -405,14 +405,14 @@ def test_request_key_posts_without_a_key(api: FakeApi) -> None:
     assert answer["status"] == "ok"
     sent = api.last
     assert "x-api-key" not in sent["headers"]
-    assert json.loads(sent["body"]) == {"email": "you@example.com", "found_via": "other", "lang": "en",
+    assert json.loads(sent["body"]) == {"email": "you@example.com", "found_via": "pypi", "lang": "en",
                                         "name": "My app"}
 
 
 def test_request_key_errors(api: FakeApi) -> None:
     api.add("POST", "/v2/keys", reply(400, {"error": "found_via is required", "code": "found-via-required"}))
     with pytest.raises(ApiError) as info:
-        request_key("you@example.com", found_via="pypi", base_url=api.url)
+        request_key("you@example.com", found_via="tiktok", base_url=api.url)
     assert info.value.code == "found-via-required"
 
 

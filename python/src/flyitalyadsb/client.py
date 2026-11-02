@@ -351,7 +351,7 @@ class Client:
             raise error_from_response(status, resp_headers, raw, limits)
 
 
-def request_key(email: str, found_via: str = "other", *, name: Optional[str] = None,
+def request_key(email: str, found_via: str = "pypi", *, name: Optional[str] = None,
                 use_case: Optional[str] = None, lang: str = "en", base_url: str = BASE_URL,
                 timeout: float = DEFAULT_TIMEOUT, user_agent: Optional[str] = None) -> Dict[str, Any]:
     """Ask for a free API key by email (``POST /v2/keys``). Nothing calls this for you.
@@ -364,8 +364,9 @@ def request_key(email: str, found_via: str = "other", *, name: Optional[str] = N
     Args:
         email: an address a person controls (temporary domains are refused).
         found_via: how you found FlyItalyADSB, one of chatgpt, claude, perplexity, gemini,
-            copilot, other_ai, search, github, api_list, forum, word_of_mouth, feeder, other.
-            An AI agent asking for its user passes the assistant it is.
+            copilot, other_ai, search, github, api_list, forum, word_of_mouth, feeder, pypi,
+            other. Defaults to ``"pypi"`` (this package). An AI agent asking for its user
+            passes the assistant it is.
         name: your app, device or agent (up to 200 characters).
         use_case: what it is for (up to 500 characters).
         lang: language of the email, ``"en"`` or ``"it"``.
