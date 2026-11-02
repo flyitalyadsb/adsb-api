@@ -1,6 +1,7 @@
 Code and data are licensed separately.
 
-The code in this repository (examples, scripts) is MIT licensed: see LICENSE.
+The code in this repository (examples, scripts, and the Python client in
+python/) is MIT licensed: see LICENSE.
 
 The flight data the API returns is NOT covered by the MIT licence. It is
 published under Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0)

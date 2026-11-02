@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flyitalyadsb"
+dynamic = ["version"]
+description = "Official Python client for the FlyItalyADSB ADS-B API: live aircraft positions worldwide, history, overflights and events. Commercial use on every plan, Free included."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "FlyItalyADSB", email = "info@flyitalyadsb.com" }]
+keywords = [
+  "ads-b",
+  "adsb",
+  "flight tracking",
+  "aviation",
+  "aircraft",
+  "mlat",
+  "api client",
+  "flight data",
+  "aircraft tracking",
+  "mode-s",
+  "military aircraft",
+  "squawk",
+  "mcp",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Scientific/Engineering :: GIS",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://flyitalyadsb.com/en/data/api/"
+Documentation = "https://flyitalyadsb.com/en/data/api/docs/"
+Source = "https://github.com/flyitalyadsb/adsb-api/tree/main/python"
+Issues = "https://github.com/flyitalyadsb/adsb-api/issues"
+"Plans and pricing" = "https://flyitalyadsb.com/en/data/api/#piani"
+"MCP server" = "https://flyitalyadsb.com/en/data/mcp/"
+OpenAPI = "https://flyitalyadsb.com/openapi.json"
+
+[tool.hatch.version]
+path = "src/flyitalyadsb/_version.py"
+
+# Core metadata 2.4 (license expression and files) is all this package needs.
+[tool.hatch.build.targets.wheel]
+packages = ["src/flyitalyadsb"]
+core-metadata-version = "2.4"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/", "tests/", "README.md", "LICENSE", "NOTICE", "pyproject.toml"]
+core-metadata-version = "2.4"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.mypy]
+strict = true
+files = ["src"]

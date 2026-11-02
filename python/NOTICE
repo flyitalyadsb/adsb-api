@@ -1,0 +1,13 @@
+Code and data are licensed separately.
+
+The code of this package (flyitalyadsb, the Python client) is MIT licensed:
+see LICENSE.
+
+The flight data the API returns is NOT covered by the MIT licence. It is
+published under Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0)
+and served under the API terms of service:
+https://flyitalyadsb.com/en/terms/
+
+Credit it where your users see the data:
+
+    Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0
