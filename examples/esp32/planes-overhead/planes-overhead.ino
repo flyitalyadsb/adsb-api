@@ -44,7 +44,7 @@ Adafruit_SSD1306 oled(128, 64, &Wire, -1);
 #endif
 
 const float RADIUS_KM = 15;        // 15 km: about 11 KB around Heathrow; 50 km over New York is ~60 KB
-const uint32_t EVERY_MS = 30000;   // the data refreshes every 2 s; 30 s is plenty for a display
+const uint32_t EVERY_MS = 30000;   // the data refreshes every 0.5 s; 30 s is plenty for a display
 const int MAX_PLANES = 8;
 const bool SHOW_GROUND = false;   // aircraft on the ground (taxiing, parked) are left out
 

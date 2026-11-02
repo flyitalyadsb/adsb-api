@@ -120,7 +120,7 @@ The client never hammers the API. On a 429 or 503 that carries `Retry-After` of 
 
 - One record per aircraft in readsb's aircraft.json format: ICAO address, position, altitude, speed, track, vertical rate, squawk, category, and the military, PIA and LADD flags. Registration and ICAO type are present for about 99% of aircraft, callsign for about 98%.
 - Unfiltered: military, PIA and LADD aircraft are flagged, not hidden. Positions from ADS-B and from the network's own MLAT, which covers many military aircraft.
-- The picture is rebuilt every 2 seconds. Coverage follows the receivers, worldwide: check an area with the [coverage tool](https://flyitalyadsb.com/en/data/coverage/?utm_source=pypi&utm_campaign=python-client) before you build on it.
+- The picture refreshes every half second. Coverage follows the receivers, worldwide: check an area with the [coverage tool](https://flyitalyadsb.com/en/data/coverage/?utm_source=pypi&utm_campaign=python-client) before you build on it.
 - History: per-aircraft daily tracks for every day since 2026-08-17, plus 2022 to 2024 with gaps. Overflights of a place since 2026-08-17.
 - Not included: routes (departure and arrival airports), schedules and photos.
 
