@@ -186,7 +186,7 @@ def live_plans():
 
 def live_coverage(site_llms):
     m = re.search(
-        r"\(([A-Z][a-z]+ \d{4}), receivers that share a position\): about (\d+)% in the United States, "
+        r"\(((?:\d{1,2} )?[A-Z][a-z]+ \d{4}), receivers that share a position\): about (\d+)% in the United States, "
         r"(\d+)% in Germany, (\d+)% in the UK and Ireland, (\d+)% in the rest of Europe", site_llms)
     italy = re.search(r"Italy, where the project started in \d{4}, is about (\d+)%", site_llms)
     if not (m and italy):
