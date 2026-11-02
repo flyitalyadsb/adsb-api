@@ -130,7 +130,7 @@ python3 examples/python/near_me.py 40.64 -73.78 -r 50     # 50 km around New Yor
 
 The network is global: born in Italy in 2020, with receivers all over the world. The API answers for any point on Earth.
 <!-- sync:coverage:start -->
-Of the receivers that share their position, about 36% are in the United States, 15% in Germany, 11% in the UK and Ireland and 16% in the rest of Europe; Asia, Australia and New Zealand follow; Latin America and Africa are thinner; Italy is about 3% (October 2026).
+Of the receivers that share their position, about 36% are in the United States, 15% in Germany, 11% in the UK and Ireland and 16% in the rest of Europe; Asia, Australia and New Zealand follow; Latin America and Africa are thinner; Italy is about 3% (26 October 2026).
 <!-- sync:coverage:end -->
 
 On top of plain ADS-B, the network's own multilateration (MLAT) locates aircraft that don't broadcast a position, many military ones included.

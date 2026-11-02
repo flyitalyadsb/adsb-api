@@ -3,8 +3,8 @@
   "info": {
     "title": "FlyItalyADSB API",
     "version": "2",
-    "summary": "Live and historical aircraft positions worldwide from the FlyItalyADSB community ADS-B/MLAT network.",
-    "description": "Unfiltered aircraft data (no FAA/LADD/BARR filtering; military aircraft included, many of them via MLAT) from a global community-run receiver network (about 3,200 receivers, densest in North America and Europe; any point on Earth can be queried), in the style of the adsb.lol API. Every endpoint except the key signup needs an X-Api-Key; keys are self-serve (see /auth.md). Plans and limits: https://flyitalyadsb.com/en/data/api/#piani. The same key works on the MCP server at https://flyitalyadsb.com/mcp. The same data is also served in the ADS-B Exchange v2 format (same paths, key headers and JSON; radius in nautical miles) at https://api.flyitalyadsb.com/api/aircraft/v2, documented at https://flyitalyadsb.com/en/data/api/docs/adsbx-v2/.",
+    "summary": "Live and historical aircraft positions worldwide from the FlyItalyADSB community ADS-B/MLAT network. Commercial use allowed on every plan, Free included; the whole world in one request from the Pro plan (€49/month).",
+    "description": "Unfiltered aircraft data (no FAA/LADD/BARR filtering; military aircraft included, many of them via MLAT) from a global community-run receiver network (about 3,200 receivers, densest in North America and Europe; any point on Earth can be queried), as readsb aircraft.json records (the same format as tar1090), plus an ADS-B Exchange v2–compatible variant at /api/aircraft/v2. Every endpoint except the key signup needs an X-Api-Key; keys are self-serve (see /auth.md). Plans and limits: https://flyitalyadsb.com/en/data/api/#piani. The same key works on the MCP server at https://flyitalyadsb.com/mcp. The same data is also served in the ADS-B Exchange v2 format (same paths, key headers and JSON; radius in nautical miles) at https://api.flyitalyadsb.com/api/aircraft/v2, documented at https://flyitalyadsb.com/en/data/api/docs/adsbx-v2/.",
     "termsOfService": "https://flyitalyadsb.com/en/terms/",
     "contact": {
       "name": "FlyItalyADSB",
@@ -1693,7 +1693,8 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "email"
+                  "email",
+                  "found_via"
                 ],
                 "properties": {
                   "email": {
@@ -1709,6 +1710,26 @@
                   "use_case": {
                     "type": "string",
                     "maxLength": 500
+                  },
+                  "found_via": {
+                    "type": "string",
+                    "enum": [
+                      "chatgpt",
+                      "claude",
+                      "perplexity",
+                      "gemini",
+                      "copilot",
+                      "other_ai",
+                      "search",
+                      "github",
+                      "api_list",
+                      "forum",
+                      "word_of_mouth",
+                      "feeder",
+                      "pypi",
+                      "other"
+                    ],
+                    "description": "Required. How you found FlyItalyADSB. An agent signing up for its user sends the assistant it is (e.g. claude, chatgpt); the official Python client sends pypi."
                   },
                   "lang": {
                     "type": "string",
@@ -1744,7 +1765,7 @@
             }
           },
           "400": {
-            "description": "Missing or invalid email, a temporary email domain (code \"disposable-email\"), or invalid JSON.",
+            "description": "Missing or invalid email, a temporary email domain (code \"disposable-email\"), a missing or unknown found_via (code \"found-via-required\", with the accepted codes in \"allowed\"), or invalid JSON.",
             "content": {
               "application/json": {
                 "schema": {

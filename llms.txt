@@ -12,7 +12,7 @@
 - Not in the data: routes (departure/arrival airports), airlines, schedules, photos. Unfiltered: military, PIA and LADD aircraft are flagged, not hidden.
 - Freshness: rebuilt every 2 s, API reloads at most every 3 s; positions older than ~60 s are not returned.
 <!-- sync:coverage:start -->
-- Where the receivers are: of those that share their position, about 36% are in the United States, 15% in Germany, 11% in the UK and Ireland and 16% in the rest of Europe; Asia, Australia and New Zealand follow; Latin America and Africa are thinner; Italy is about 3% (October 2026).
+- Where the receivers are: of those that share their position, about 36% are in the United States, 15% in Germany, 11% in the UK and Ireland and 16% in the rest of Europe; Asia, Australia and New Zealand follow; Latin America and Africa are thinner; Italy is about 3% (26 October 2026).
 <!-- sync:coverage:end -->
 - Coverage check without a key: `GET https://api.flyitalyadsb.com/api/coverage?lat=&lon=&radius=` (25/50/100/200 km, 30 requests/min per IP; send a User-Agent of your own), or https://flyitalyadsb.com/en/data/coverage/?utm_source=github&utm_campaign=adsb-api
 
