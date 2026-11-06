@@ -24,6 +24,14 @@ print(client.limits)  # your plan and usage this month, from the X-FIA-* headers
 
 Keep the key out of your code and out of git: an environment variable, or your secret store.
 
+Or from code, with an address its owner gave you for this. `audience` (who the data is for: `AUDIENCES`) and `other_source` (another flight data source already in use, and the role of this one: `OTHER_SOURCES`) are accepted now and will soon be required by the API:
+
+```python
+from flyitalyadsb import request_key
+
+request_key("you@example.com", audience="my_product_users", other_source="none", name="My app")
+```
+
 ## Methods
 
 Every method is one request on your key; the account calls through `request()` (`/me/location`, `/webhooks`) are not counted. Radii are in kilometres.
@@ -44,7 +52,7 @@ Every method is one request on your key; the account calls through `request()` (
 | `overflights(lat, lon, radius_km, start, end)` | `/overflights` | `Overflights`: the aircraft that flew over a place between two times |
 | `events(lat, lon, radius_km, since=, until=, kinds=)` | `/events` | `Events`: emergencies, military and other notable traffic, up to 7 days back |
 | `request(method, path, params=, body=)` | any other, e.g. `/me/location`, `/webhooks` | the parsed JSON |
-| `request_key(email, found_via="pypi")` (a function) | `POST /keys` | asks for a free key: the address gets a one-time link. Never called for you |
+| `request_key(email, found_via="pypi", audience=, other_source=)` (a function) | `POST /keys` | asks for a free key: the address gets a one-time link. Never called for you |
 
 `Aircraft` has typed fields with readable names (`callsign`, `registration`, `icao_type`, `lat`, `lon`, `altitude` in feet or `"ground"`, `ground_speed` in knots, `vertical_rate` in ft/min, `squawk`, `source` such as `adsb_icao` or `mlat`, `db_flags`) and the flags `military`, `interesting`, `pia`, `ladd`, `on_ground` and `from_mlat`. Every field the API sent stays available with its own name in `raw` and through `get()`, e.g. `a.get("nav_altitude_mcp")`. Lists are iterable and have `len()`. Every result keeps the full JSON in `raw`. The fields and units: [fields and units](https://flyitalyadsb.com/en/data/api/docs/fields/?utm_source=pypi&utm_campaign=python-client).
 

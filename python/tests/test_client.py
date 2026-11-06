@@ -401,18 +401,53 @@ def test_missing_key_points_to_the_signup(api: FakeApi) -> None:
 
 def test_request_key_posts_without_a_key(api: FakeApi) -> None:
     api.add("POST", "/v2/keys", reply(202, {"status": "ok", "message": "check your email for a link to your key"}))
-    answer = request_key("you@example.com", name="My app", base_url=api.url)
+    answer = request_key("you@example.com", audience="my_product_users", other_source="none", name="My app",
+                         base_url=api.url)
     assert answer["status"] == "ok"
     sent = api.last
     assert "x-api-key" not in sent["headers"]
     assert json.loads(sent["body"]) == {"email": "you@example.com", "found_via": "pypi", "lang": "en",
-                                        "name": "My app"}
+                                        "audience": "my_product_users", "other_source": "none", "name": "My app"}
+
+
+def test_request_key_sends_the_signup_answers(api: FakeApi) -> None:
+    api.add("POST", "/v2/keys", reply(202, {"status": "ok"}))
+    request_key("you@example.com", found_via="Claude", audience=" Other ", audience_other="A museum kiosk",
+                other_source="backup", other_source_name="our own receiver", ai_prompt="free flight api with routes",
+                base_url=api.url)
+    assert json.loads(api.last["body"]) == {
+        "email": "you@example.com", "found_via": "Claude", "lang": "en", "audience": "other",
+        "audience_other": "A museum kiosk", "other_source": "backup", "other_source_name": "our own receiver",
+        "ai_prompt": "free flight api with routes"}
+
+
+def test_request_key_refuses_wrong_answers_before_sending(api: FakeApi) -> None:
+    cases = [
+        (dict(audience="me", other_source="none"), "audience must be one of just_me, my_product_users"),
+        (dict(audience="just_me", other_source="yes"), "other_source must be one of none, switching, backup"),
+        (dict(audience="just_me", audience_other="x", other_source="none"), 'audience_other goes with audience="other"'),
+        (dict(audience="just_me", other_source="none", other_source_name="x"), "other_source_name goes with"),
+        (dict(audience="just_me", other_source="none", ai_prompt="x"), "ai_prompt goes with an AI assistant"),
+        (dict(audience="other", audience_other="x" * 121, other_source="none"), "at most 120 characters"),
+    ]
+    for kwargs, message in cases:
+        with pytest.raises(ValueError, match=message):
+            request_key("you@example.com", base_url=api.url, **kwargs)  # type: ignore[arg-type]
+    assert api.requests == []
+
+
+def test_request_key_warns_without_the_answers_the_api_will_require(api: FakeApi) -> None:
+    api.add("POST", "/v2/keys", reply(202, {"status": "ok"}))
+    with pytest.warns(FutureWarning, match="audience= and other_source="):
+        request_key("you@example.com", base_url=api.url)
+    assert json.loads(api.last["body"]) == {"email": "you@example.com", "found_via": "pypi", "lang": "en"}
+    assert flyitalyadsb.AUDIENCES[-1] == "other" and "switching" in flyitalyadsb.OTHER_SOURCES
 
 
 def test_request_key_errors(api: FakeApi) -> None:
     api.add("POST", "/v2/keys", reply(400, {"error": "found_via is required", "code": "found-via-required"}))
     with pytest.raises(ApiError) as info:
-        request_key("you@example.com", found_via="tiktok", base_url=api.url)
+        request_key("you@example.com", found_via="tiktok", audience="just_me", other_source="none", base_url=api.url)
     assert info.value.code == "found-via-required"
 
 

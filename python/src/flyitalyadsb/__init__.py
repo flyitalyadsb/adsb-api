@@ -15,8 +15,11 @@ Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0
 
 from ._version import __version__
 from .client import (
+    AI_FOUND_VIA,
     API_KEY_ENV,
+    AUDIENCES,
     BASE_URL,
+    OTHER_SOURCES,
     SIGNUP_URL,
     USER_AGENT,
     WORLD_RADIUS_KM,
@@ -52,7 +55,10 @@ from .models import (
 ATTRIBUTION = "Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0"
 
 __all__ = [
+    "AI_FOUND_VIA",
     "API_KEY_ENV",
+    "AUDIENCES",
+    "OTHER_SOURCES",
     "ATTRIBUTION",
     "BASE_URL",
     "LIMITS_DOCS_URL",
