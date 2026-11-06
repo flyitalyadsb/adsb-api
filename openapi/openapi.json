@@ -40,6 +40,10 @@
       "description": "Per-aircraft daily tracks since 2022-04-10, with gaps, and the aircraft that flew over a place (since 2026-08-17)."
     },
     {
+      "name": "flights",
+      "description": "Flights the network observed (departure and arrival airport, times, duration), built every night from its own tracks; yesterday and earlier, not today; not airline schedules. https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights"
+    },
+    {
       "name": "keys",
       "description": "Self-serve API keys."
     },
@@ -68,7 +72,7 @@
             "name": "hex",
             "in": "path",
             "required": true,
-            "description": "24-bit ICAO address, hex (case-insensitive).",
+            "description": "24-bit ICAO address, hex (case-insensitive, an 0x prefix is accepted).",
             "schema": {
               "type": "string"
             }
@@ -76,13 +80,19 @@
         ],
         "responses": {
           "200": {
-            "description": "The aircraft currently seen with this identifier.",
+            "description": "The aircraft currently seen with this identifier, unchanged. X-Matched-As and X-Matched-Value are present when it was found under another form of the identifier.",
             "headers": {
               "X-FIA-Plan": {
                 "$ref": "#/components/headers/X-FIA-Plan"
               },
               "X-FIA-Used-Month": {
                 "$ref": "#/components/headers/X-FIA-Used-Month"
+              },
+              "X-Matched-As": {
+                "$ref": "#/components/headers/X-Matched-As"
+              },
+              "X-Matched-Value": {
+                "$ref": "#/components/headers/X-Matched-Value"
               }
             },
             "content": {
@@ -97,11 +107,75 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "404": {
-            "description": "No aircraft with this identifier is being received right now.",
+            "description": "No aircraft with this identifier is in the air and seen by the network right now. The body says what was tried, a hint, `found_as` when the text is another identifier of an airborne aircraft, and `last_seen`, the last observed flight, when there is one.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/LookupNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v2/hex/{hex}": {
+      "get": {
+        "summary": "One aircraft by ICAO address (alias of /v2/icao)",
+        "tags": [
+          "live"
+        ],
+        "parameters": [
+          {
+            "name": "hex",
+            "in": "path",
+            "required": true,
+            "description": "24-bit ICAO address, hex (case-insensitive, an 0x prefix is accepted).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The aircraft currently seen with this identifier, unchanged. X-Matched-As and X-Matched-Value are present when it was found under another form of the identifier.",
+            "headers": {
+              "X-FIA-Plan": {
+                "$ref": "#/components/headers/X-FIA-Plan"
+              },
+              "X-FIA-Used-Month": {
+                "$ref": "#/components/headers/X-FIA-Used-Month"
+              },
+              "X-Matched-As": {
+                "$ref": "#/components/headers/X-Matched-As"
+              },
+              "X-Matched-Value": {
+                "$ref": "#/components/headers/X-Matched-Value"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aircraft"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "No aircraft with this identifier is in the air and seen by the network right now. The body says what was tried, a hint, `found_as` when the text is another identifier of an airborne aircraft, and `last_seen`, the last observed flight, when there is one.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LookupNotFound"
                 }
               }
             }
@@ -117,7 +191,8 @@
     },
     "/v2/callsign/{callsign}": {
       "get": {
-        "summary": "One aircraft by callsign",
+        "summary": "One aircraft by callsign (flight numbers tried too)",
+        "description": "Tries, in order: the callsign as written; without the zeros after the airline prefix (CPA0289 -> CPA289); the ICAO form of the airline's IATA code (FR5518 -> RYR5518, 5X1219 -> UPS1219). Some airlines (Ryanair, easyJet, Wizz Air) mostly fly alphanumeric callsigns not linked to the flight number. https://flyitalyadsb.com/en/data/api/docs/endpoints/#callsign-and-flight-number",
         "tags": [
           "live"
         ],
@@ -126,7 +201,7 @@
             "name": "callsign",
             "in": "path",
             "required": true,
-            "description": "Flight callsign (case-insensitive).",
+            "description": "Callsign as transmitted (e.g. RYR55NU, BAW185) or a flight number (e.g. FR5518, BA0185); case and spaces ignored.",
             "schema": {
               "type": "string"
             }
@@ -134,13 +209,19 @@
         ],
         "responses": {
           "200": {
-            "description": "The aircraft currently seen with this identifier.",
+            "description": "The aircraft currently seen with this identifier, unchanged. X-Matched-As and X-Matched-Value are present when it was found under another form of the identifier.",
             "headers": {
               "X-FIA-Plan": {
                 "$ref": "#/components/headers/X-FIA-Plan"
               },
               "X-FIA-Used-Month": {
                 "$ref": "#/components/headers/X-FIA-Used-Month"
+              },
+              "X-Matched-As": {
+                "$ref": "#/components/headers/X-Matched-As"
+              },
+              "X-Matched-Value": {
+                "$ref": "#/components/headers/X-Matched-Value"
               }
             },
             "content": {
@@ -155,11 +236,11 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "404": {
-            "description": "No aircraft with this identifier is being received right now.",
+            "description": "No aircraft with this identifier is in the air and seen by the network right now. The body says what was tried, a hint, `found_as` when the text is another identifier of an airborne aircraft, and `last_seen`, the last observed flight, when there is one.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/LookupNotFound"
                 }
               }
             }
@@ -184,7 +265,7 @@
             "name": "reg",
             "in": "path",
             "required": true,
-            "description": "Registration, e.g. MM62179 (case-insensitive).",
+            "description": "Registration, e.g. MM62179; case, spaces, dashes and dots ignored (SP-GPM = SPGPM).",
             "schema": {
               "type": "string"
             }
@@ -192,13 +273,19 @@
         ],
         "responses": {
           "200": {
-            "description": "The aircraft currently seen with this identifier.",
+            "description": "The aircraft currently seen with this identifier, unchanged. X-Matched-As and X-Matched-Value are present when it was found under another form of the identifier.",
             "headers": {
               "X-FIA-Plan": {
                 "$ref": "#/components/headers/X-FIA-Plan"
               },
               "X-FIA-Used-Month": {
                 "$ref": "#/components/headers/X-FIA-Used-Month"
+              },
+              "X-Matched-As": {
+                "$ref": "#/components/headers/X-Matched-As"
+              },
+              "X-Matched-Value": {
+                "$ref": "#/components/headers/X-Matched-Value"
               }
             },
             "content": {
@@ -213,11 +300,70 @@
             "$ref": "#/components/responses/Unauthorized"
           },
           "404": {
-            "description": "No aircraft with this identifier is being received right now.",
+            "description": "No aircraft with this identifier is in the air and seen by the network right now. The body says what was tried, a hint, `found_as` when the text is another identifier of an airborne aircraft, and `last_seen`, the last observed flight, when there is one.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/LookupNotFound"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v2/find/{text}": {
+      "get": {
+        "summary": "One aircraft by callsign, flight number, registration or ICAO address",
+        "description": "For when you do not know which identifier you have: tries the text as a callsign (with the same forms as /v2/callsign), a registration (dashes ignored) and an ICAO address, and says how each airborne aircraft matched (at most one per kind, the same aircraft once). https://flyitalyadsb.com/en/data/api/docs/endpoints/#callsign-and-flight-number",
+        "tags": [
+          "live"
+        ],
+        "parameters": [
+          {
+            "name": "text",
+            "in": "path",
+            "required": true,
+            "description": "A callsign, flight number, registration or ICAO address.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The airborne aircraft that match.",
+            "headers": {
+              "X-FIA-Plan": {
+                "$ref": "#/components/headers/X-FIA-Plan"
+              },
+              "X-FIA-Used-Month": {
+                "$ref": "#/components/headers/X-FIA-Used-Month"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "No aircraft with this identifier is in the air and seen by the network right now. The body says what was tried, a hint, `found_as` when the text is another identifier of an airborne aircraft, and `last_seen`, the last observed flight, when there is one.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LookupNotFound"
                 }
               }
             }
@@ -995,6 +1141,356 @@
           },
           "503": {
             "description": "Too many searches at once, or the index is briefly unavailable: retry shortly (Retry-After).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/flights/callsign/{callsign}": {
+      "get": {
+        "summary": "A callsign's observed flights and usual routes",
+        "description": "The flights of a callsign the network observed in the last days, newest first, and its usual routes (`usual`, with how many times each was flown). The callsign takes the same forms as /v2/callsign, so a flight number works too (matched_as/matched_value say which form matched). A callsign with no flights answers 200 with count 0. https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights",
+        "tags": [
+          "flights"
+        ],
+        "parameters": [
+          {
+            "name": "callsign",
+            "in": "path",
+            "required": true,
+            "description": "Callsign or flight number.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "description": "How many days back, up to yesterday.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 14,
+              "default": 7
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The callsign's observed flights.",
+            "headers": {
+              "X-FIA-Plan": {
+                "$ref": "#/components/headers/X-FIA-Plan"
+              },
+              "X-FIA-Used-Month": {
+                "$ref": "#/components/headers/X-FIA-Used-Month"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallsignFlights"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A parameter is malformed or out of range.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "description": "The flights index is briefly unavailable: retry shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/flights/icao/{hex}": {
+      "get": {
+        "summary": "One aircraft's observed flights (flight log)",
+        "description": "One aircraft's observed flights between two UTC days (default the last 7 available days, at most 31 per request), newest first, with a summary (flights, minutes, airports) for flight hours. An aircraft with no flights in the period answers 200 with count 0. https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights",
+        "tags": [
+          "flights"
+        ],
+        "parameters": [
+          {
+            "name": "hex",
+            "in": "path",
+            "required": true,
+            "description": "24-bit ICAO address, hex.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "description": "First UTC day, YYYY-MM-DD.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "description": "Last UTC day, YYYY-MM-DD (included).",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The aircraft's observed flights.",
+            "headers": {
+              "X-FIA-Plan": {
+                "$ref": "#/components/headers/X-FIA-Plan"
+              },
+              "X-FIA-Used-Month": {
+                "$ref": "#/components/headers/X-FIA-Used-Month"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AircraftFlights"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A parameter is malformed or out of range.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "description": "The flights index is briefly unavailable: retry shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/flights/reg/{reg}": {
+      "get": {
+        "summary": "One aircraft's observed flights, by registration",
+        "description": "One aircraft's observed flights between two UTC days (default the last 7 available days, at most 31 per request), newest first, with a summary (flights, minutes, airports) for flight hours. An aircraft with no flights in the period answers 200 with count 0. https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights",
+        "tags": [
+          "flights"
+        ],
+        "parameters": [
+          {
+            "name": "reg",
+            "in": "path",
+            "required": true,
+            "description": "Registration; case, spaces and dashes ignored.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "description": "First UTC day, YYYY-MM-DD.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "description": "Last UTC day, YYYY-MM-DD (included).",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The aircraft's observed flights.",
+            "headers": {
+              "X-FIA-Plan": {
+                "$ref": "#/components/headers/X-FIA-Plan"
+              },
+              "X-FIA-Used-Month": {
+                "$ref": "#/components/headers/X-FIA-Used-Month"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AircraftFlights"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A parameter is malformed or out of range.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "description": "The flights index is briefly unavailable: retry shortly.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/flights/airport/{code}": {
+      "get": {
+        "summary": "Departures or arrivals observed at an airport on one day",
+        "description": "The flights observed leaving (or reaching) an airport on one UTC day, sorted by time. https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights",
+        "tags": [
+          "flights"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "description": "Airport ICAO (e.g. EGLL) or IATA (e.g. LHR) code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "departures or arrivals.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "departures",
+                "arrivals"
+              ],
+              "default": "departures"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "description": "UTC day, YYYY-MM-DD; default the latest day available.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The departures or arrivals.",
+            "headers": {
+              "X-FIA-Plan": {
+                "$ref": "#/components/headers/X-FIA-Plan"
+              },
+              "X-FIA-Used-Month": {
+                "$ref": "#/components/headers/X-FIA-Used-Month"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirportFlights"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A parameter is malformed or out of range.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Unknown airport code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "description": "The flights index is briefly unavailable: retry shortly.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1875,6 +2371,23 @@
         "schema": {
           "type": "integer"
         }
+      },
+      "X-Matched-As": {
+        "description": "Present when the aircraft was found under another form of the identifier: callsign, reg or icao.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "callsign",
+            "reg",
+            "icao"
+          ]
+        }
+      },
+      "X-Matched-Value": {
+        "description": "The form that matched, e.g. RYR5518 for FR5518, SP-GPM for SPGPM.",
+        "schema": {
+          "type": "string"
+        }
       }
     },
     "responses": {
@@ -1918,6 +2431,376 @@
       }
     },
     "schemas": {
+      "LookupNotFound": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "const": "not found"
+          },
+          "query": {
+            "type": "string",
+            "description": "/v2/find only: the text, cleaned."
+          },
+          "tried": {
+            "description": "The forms tried: a list for /v2/callsign and /v2/reg; for /v2/find an object (callsign list, reg, icao).",
+            "oneOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": true
+              }
+            ]
+          },
+          "hint": {
+            "type": "string",
+            "description": "Why it may not be found, e.g. a flight number is not always the callsign."
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri"
+          },
+          "found_as": {
+            "type": "object",
+            "description": "The text is another identifier of an aircraft in the air: where to ask for it. Never another aircraft in place of the asked one.",
+            "properties": {
+              "matched_as": {
+                "enum": [
+                  "callsign",
+                  "reg",
+                  "icao"
+                ]
+              },
+              "value": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          },
+          "last_seen": {
+            "$ref": "#/components/schemas/Flight",
+            "description": "The last flight observed for it in the past 7 days, when there is one."
+          }
+        },
+        "additionalProperties": true
+      },
+      "FindResult": {
+        "type": "object",
+        "required": [
+          "query",
+          "count",
+          "results"
+        ],
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "matched_as": {
+                  "enum": [
+                    "callsign",
+                    "reg",
+                    "icao"
+                  ]
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The form that matched."
+                },
+                "aircraft": {
+                  "$ref": "#/components/schemas/Aircraft"
+                }
+              }
+            }
+          }
+        }
+      },
+      "FlightEnd": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "One end of an observed flight; null when it was not identified.",
+        "properties": {
+          "airport": {
+            "type": "string",
+            "description": "ICAO code (or the local code of a small airfield)."
+          },
+          "iata": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ISO 3166-1 alpha-2."
+          },
+          "time": {
+            "type": "integer",
+            "description": "Unix seconds: when the network saw the aircraft at this end."
+          },
+          "seen": {
+            "enum": [
+              "ground",
+              "low",
+              "approach"
+            ],
+            "description": "How the airport was recognised: ground (on the ground within 6 km), low (at most 2,500 ft above it within 15 km), approach (at most 6,000 ft within 30 km, heading consistent). ground/low times are close to take-off or landing."
+          }
+        }
+      },
+      "Flight": {
+        "type": "object",
+        "description": "A flight observed by the network, not an airline schedule. Never the owner or operator.",
+        "properties": {
+          "icao": {
+            "type": "string"
+          },
+          "r": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Registration."
+          },
+          "t": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ICAO type code."
+          },
+          "callsign": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "$ref": "#/components/schemas/FlightEnd"
+          },
+          "to": {
+            "$ref": "#/components/schemas/FlightEnd"
+          },
+          "first_seen": {
+            "type": "integer",
+            "description": "Unix seconds."
+          },
+          "last_seen": {
+            "type": "integer",
+            "description": "Unix seconds."
+          },
+          "duration_min": {
+            "type": "integer",
+            "description": "Observed minutes, first to last point."
+          },
+          "day": {
+            "type": "string",
+            "format": "date",
+            "description": "UTC day the flight started; flights across midnight UTC are joined."
+          }
+        }
+      },
+      "FlightsCoverage": {
+        "type": "object",
+        "description": "The days searched; missing = days in the period that are not built (yet).",
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date"
+          },
+          "to": {
+            "type": "string",
+            "format": "date"
+          },
+          "missing": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        }
+      },
+      "CallsignFlights": {
+        "type": "object",
+        "properties": {
+          "callsign": {
+            "type": "string"
+          },
+          "matched_as": {
+            "type": "string",
+            "description": "Present when a translated form matched (e.g. a flight number)."
+          },
+          "matched_value": {
+            "type": "string"
+          },
+          "days": {
+            "type": "integer"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/FlightsCoverage"
+          },
+          "usual": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "string"
+                },
+                "from_iata": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "to": {
+                  "type": "string"
+                },
+                "to_iata": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "count": {
+                  "type": "integer"
+                },
+                "last_day": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          },
+          "count": {
+            "type": "integer"
+          },
+          "flights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Flight"
+            }
+          }
+        }
+      },
+      "AircraftFlights": {
+        "type": "object",
+        "properties": {
+          "icao": {
+            "type": "string"
+          },
+          "r": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/FlightsCoverage"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "flights": {
+                "type": "integer"
+              },
+              "minutes": {
+                "type": "integer"
+              },
+              "airports": {
+                "type": "integer"
+              }
+            }
+          },
+          "flights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Flight"
+            }
+          }
+        }
+      },
+      "AirportFlights": {
+        "type": "object",
+        "properties": {
+          "airport": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "iata": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "country": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "type": {
+            "enum": [
+              "departures",
+              "arrivals"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "flights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Flight"
+            }
+          }
+        }
+      },
       "Error": {
         "type": "object",
         "required": [
