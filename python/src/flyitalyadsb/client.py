@@ -12,6 +12,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import warnings
 from datetime import date, datetime, timezone
 from typing import Any, Callable, Dict, Iterable, Mapping, NamedTuple, Optional, Tuple, Union, overload
 
@@ -351,9 +352,38 @@ class Client:
             raise error_from_response(status, resp_headers, raw, limits)
 
 
-def request_key(email: str, found_via: str = "pypi", *, name: Optional[str] = None,
-                use_case: Optional[str] = None, lang: str = "en", base_url: str = BASE_URL,
-                timeout: float = DEFAULT_TIMEOUT, user_agent: Optional[str] = None) -> Dict[str, Any]:
+#: Who the data is for: the ``audience`` codes of ``POST /v2/keys``.
+AUDIENCES = ("just_me", "my_product_users", "internal_org", "research", "other")
+#: Whether another flight data source is already in use and what role this one will have:
+#: the ``other_source`` codes. ``none``: this is the first; ``switching``: it becomes the main
+#: one; ``backup``: it is the backup; ``comparing``: still comparing sources.
+OTHER_SOURCES = ("none", "switching", "backup", "comparing")
+#: The ``found_via`` codes of an AI assistant: only with them is ``ai_prompt`` kept.
+AI_FOUND_VIA = frozenset({"chatgpt", "claude", "perplexity", "gemini", "copilot", "other_ai"})
+
+
+def _code(value: Optional[str], name: str, allowed: Tuple[str, ...]) -> Optional[str]:
+    if value is None:
+        return None
+    code = str(value).strip().lower()
+    if code not in allowed:
+        raise ValueError(f"{name} must be one of {', '.join(allowed)}, not {value!r}")
+    return code
+
+
+def _short(value: Optional[str], name: str, limit: int) -> Optional[str]:
+    text = (value or "").strip()
+    if len(text) > limit:
+        raise ValueError(f"{name} can be at most {limit} characters, not {len(text)}")
+    return text or None
+
+
+def request_key(email: str, found_via: str = "pypi", *, audience: Optional[str] = None,
+                other_source: Optional[str] = None, audience_other: Optional[str] = None,
+                other_source_name: Optional[str] = None, ai_prompt: Optional[str] = None,
+                name: Optional[str] = None, use_case: Optional[str] = None, lang: str = "en",
+                base_url: str = BASE_URL, timeout: float = DEFAULT_TIMEOUT,
+                user_agent: Optional[str] = None) -> Dict[str, Any]:
     """Ask for a free API key by email (``POST /v2/keys``). Nothing calls this for you.
 
     The answer never contains the key: the address receives a one-time link, valid for
@@ -367,14 +397,48 @@ def request_key(email: str, found_via: str = "pypi", *, name: Optional[str] = No
             copilot, other_ai, search, github, api_list, forum, word_of_mouth, feeder, pypi,
             other. Defaults to ``"pypi"`` (this package). An AI agent asking for its user
             passes the assistant it is.
+        audience: who the data is for, one of :data:`AUDIENCES`: ``just_me``,
+            ``my_product_users``, ``internal_org``, ``research``, ``other``. Accepted now and
+            soon required by the API: pass it (an agent asks its user rather than guessing).
+        other_source: whether you already use another flight data source and what role this
+            one will have, one of :data:`OTHER_SOURCES`: ``none``, ``switching``, ``backup``,
+            ``comparing``. Accepted now and soon required, like ``audience``.
+        audience_other: with ``audience="other"``, what (up to 120 characters).
+        other_source_name: with an ``other_source`` other than ``"none"``, which source (up to
+            120 characters).
+        ai_prompt: only when ``found_via`` is an AI assistant (:data:`AI_FOUND_VIA`): what was
+            asked to it (up to 300 characters).
         name: your app, device or agent (up to 200 characters).
         use_case: what it is for (up to 500 characters).
         lang: language of the email, ``"en"`` or ``"it"``.
 
     Returns:
         The API's answer, e.g. ``{"status": "ok", "message": "check your email ..."}``.
+
+    Raises:
+        ValueError: an ``audience`` or ``other_source`` outside the codes above, a text that
+            goes with another answer, or one that is too long. Nothing is sent then.
     """
+    aud = _code(audience, "audience", AUDIENCES)
+    src = _code(other_source, "other_source", OTHER_SOURCES)
+    aud_other = _short(audience_other, "audience_other", 120)
+    src_name = _short(other_source_name, "other_source_name", 120)
+    prompt = _short(ai_prompt, "ai_prompt", 300)
+    if aud_other and aud != "other":
+        raise ValueError('audience_other goes with audience="other"')
+    if src_name and src in (None, "none"):
+        raise ValueError('other_source_name goes with an other_source other than "none"')
+    if prompt and found_via.strip().lower() not in AI_FOUND_VIA:
+        raise ValueError("ai_prompt goes with an AI assistant in found_via: " + ", ".join(sorted(AI_FOUND_VIA)))
+    if aud is None or src is None:
+        warnings.warn("request_key(): pass audience= and other_source=; the API will soon require them "
+                      f"(audience: {', '.join(AUDIENCES)}; other_source: {', '.join(OTHER_SOURCES)})",
+                      FutureWarning, stacklevel=2)
     payload: Dict[str, Any] = {"email": email, "found_via": found_via, "lang": lang}
+    for key, value in (("audience", aud), ("audience_other", aud_other), ("other_source", src),
+                       ("other_source_name", src_name), ("ai_prompt", prompt)):
+        if value:
+            payload[key] = value
     if name:
         payload["name"] = name
     if use_case:
