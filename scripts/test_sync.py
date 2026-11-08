@@ -70,6 +70,18 @@ class Spec(unittest.TestCase):
             with self.assertRaises(sync.SyncError):
                 sync.check_spec(spec)
 
+    def test_response_with_several_shapes(self):
+        # /v2/callsign answers one aircraft or, for /callsign/a,b,c, a list (oneOf, 2026-11-07):
+        # fine while one shape still has every field the examples read.
+        spec = copy.deepcopy(SPEC)
+        ok = spec["paths"]["/v2/callsign/{callsign}"]["get"]["responses"]["200"]["content"]["application/json"]
+        ok["schema"] = {"oneOf": [{"$ref": "#/components/schemas/Aircraft"},
+                                  {"type": "object", "properties": {"count": {}, "ac": {}}}]}
+        sync.check_spec(spec)
+        spec["components"]["schemas"]["Aircraft"]["properties"].pop("squawk")
+        with self.assertRaises(sync.SyncError):
+            sync.check_spec(spec)
+
     def test_readme_endpoint_missing_from_spec_fails(self):
         spec = copy.deepcopy(SPEC)
         spec["paths"].pop("/v2/profile/{icao}")
