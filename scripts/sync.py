@@ -309,8 +309,11 @@ def check_spec(spec):
             fail(f"{path}: parameters {missing}, used by {users}, are no longer in the spec")
         content = resolve(spec, op.get("responses", {}).get("200", {})).get("content", {})
         schema = resolve(spec, content.get("application/json", {}).get("schema", {}))
-        props = schema.get("properties", {})
-        missing = [f for f in fields if f not in props]
+        # A response with several shapes (oneOf/anyOf: /v2/callsign answers one aircraft,
+        # or a list for /callsign/a,b,c since 2026-11-07) is fine if one of them still has
+        # every field the examples read.
+        variants = [resolve(spec, v) for v in schema.get("oneOf", []) + schema.get("anyOf", [])] or [schema]
+        missing = min(([f for f in fields if f not in v.get("properties", {})] for v in variants), key=len)
         if missing:
             fail(f"{path}: response fields {missing}, used by {users}, are no longer in the spec")
     schemas = spec.get("components", {}).get("schemas", {})

@@ -28,7 +28,7 @@
 <!-- sync:plans:end -->
 - Over a limit: 429 (Retry-After) or 403 (radius); refused requests are not counted and never billed. No SLA on any plan; paid plans help cover server and bandwidth costs.
 - Feeders (people who run a receiver for the network) get Pro limits on their Free keys at no cost, for non-commercial use: https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api
-- Reselling the data as an API or feed for other people's products, an SLA, or volume beyond Business: https://flyitalyadsb.com/en/contact/?utm_source=github&utm_campaign=adsb-api
+- More than 25 watched aircraft, more volume, an SLA, or reselling the data as an API or feed for other people's products: https://flyitalyadsb.com/en/contact/?utm_source=github&utm_campaign=adsb-api
 - Current plans: https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#piani
 
 ## Using it in a product
