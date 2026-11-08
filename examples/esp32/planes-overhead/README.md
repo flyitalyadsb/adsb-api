@@ -45,7 +45,7 @@ You can, on every plan, Free included, within its limits.
 - **One key for the whole product.** Every unit's requests count on that key. Size it as requests per minute per unit × units: the [plans](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#piani).
 - **From a few dozen units, use your own server.** A key in firmware can be extracted, and usage grows with every unit sold. Let your server fetch once (your customers' area, or the whole world on Pro) and have the units ask it: [`cache_server.py`](../../python/cache_server.py). That stays at 86,400 requests a month however many units you sell.
 - **Credit the data** on the device, in its manual or on the product page: `Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0`. The OLED version shows the short form at the bottom of the screen.
-- The feeder perk (Pro limits for people who run a receiver) is for non-commercial use: it doesn't cover units you sell.
+- The feeder perk (Pro's limits and features for people who run a receiver) is for non-commercial use: it doesn't cover units you sell.
 
 More in the [displays and devices guide](https://flyitalyadsb.com/en/data/products/displays-and-devices/?utm_source=github&utm_campaign=adsb-api).
 

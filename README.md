@@ -168,7 +168,7 @@ Choose mostly by area: each request asks for the aircraft in a circle, and the l
 - The monthly counter resets on the 1st.
 - Every response carries `X-FIA-Plan`, `X-FIA-Limit-Per-Min`, `X-FIA-Quota-Month` and `X-FIA-Used-Month`.
 - No plan includes an SLA or guaranteed response times; the service is best effort.
-- **Run a receiver?** Feeders get Pro limits on their Free keys at no cost, for non-commercial use. It's how the network grows: [become a feeder](https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api), then turn the perk on in [My API](https://flyitalyadsb.com/en/data/api/account/?utm_source=github&utm_campaign=adsb-api).
+- **Run a receiver?** Feeders get Pro's limits and features on their Free keys at no cost, for non-commercial use. It's how the network grows: [become a feeder](https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api), then turn the perk on in [My API](https://flyitalyadsb.com/en/data/api/account/?utm_source=github&utm_campaign=adsb-api).
 - More than 25 watched aircraft, more volume, an SLA, or reselling the data as an API or feed for other people's products: [get in touch](https://flyitalyadsb.com/en/contact/?utm_source=github&utm_campaign=adsb-api).
 
 Current prices and limits are always on the [plans page](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#piani).
