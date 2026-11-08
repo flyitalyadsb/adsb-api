@@ -158,10 +158,10 @@ Choose mostly by area: each request asks for the aircraft in a circle, and the l
 | Free | €0 | 30 | 300,000 | up to 500 km |
 | Starter | €9/month + tax | 60 | 1,000,000 | up to 1,000 km |
 | Pro | €49/month + tax | 300 | 10,000,000 | whole world |
-| Business | €249/month + tax | 1,000 | 50,000,000 | whole world |
+| Fleet | €149/month + tax | 300 | 10,000,000 | whole world |
 
 - The Free plan also has a cap of 100 requests a minute per IP.
-- The whole world in one request (`/lat/0/lon/0/dist/20040`) needs Pro or Business.
+- The whole world in one request (`/lat/0/lon/0/dist/20040`) needs Pro or Fleet.
 <!-- sync:plans:end -->
 
 - Over a limit you get `429` (with `Retry-After`) or `403` for too large a radius. Refused requests are not counted and nothing is ever billed beyond the plan.
