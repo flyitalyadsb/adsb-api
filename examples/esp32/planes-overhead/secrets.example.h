@@ -4,7 +4,7 @@
 #define WIFI_SSID "your-wifi"
 #define WIFI_PASS "your-wifi-password"
 
-// Free key: https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key
+// Free key: https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#api-key
 #define FLYITALYADSB_API_KEY "your-api-key"
 
 // Where the display sits, in decimal degrees (right-click on a map to copy them).

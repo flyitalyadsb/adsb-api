@@ -41,7 +41,7 @@ BASE_URL = "https://api.flyitalyadsb.com/v2"
 #: The environment variable read when no key is passed.
 API_KEY_ENV = "FLYITALYADSB_API_KEY"
 #: Where to get a free key (self-serve, commercial use included).
-SIGNUP_URL = "https://flyitalyadsb.com/en/data/api/?utm_source=python-client&utm_campaign=python-client#api-key"
+SIGNUP_URL = "https://flyitalyadsb.com/data/api/?utm_source=python-client&utm_campaign=python-client#api-key"
 #: The radius that covers the whole Earth from any point: ``world()``.
 WORLD_RADIUS_KM = 20040
 USER_AGENT = f"flyitalyadsb-python/{__version__}"
@@ -112,7 +112,7 @@ class Client:
 
     Args:
         api_key: the key; by default the ``FLYITALYADSB_API_KEY`` environment variable.
-            A free key, commercial use included: https://flyitalyadsb.com/en/data/api/#api-key
+            A free key, commercial use included: https://flyitalyadsb.com/data/api/#api-key
         base_url: the API's base URL.
         timeout: seconds to wait for each answer.
         user_agent: your app's name and version, e.g. ``"my-app/1.0"``; it goes before

@@ -9,7 +9,7 @@ Commercial use is allowed on every plan, Free included. Standard library only.
     >>> for a in client.near(51.47, -0.45, 25):
     ...     print(a.callsign, a.registration, a.icao_type, a.altitude)
 
-Docs: https://flyitalyadsb.com/en/data/api/docs/
+Docs: https://flyitalyadsb.com/data/api/docs/
 Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0
 """
 

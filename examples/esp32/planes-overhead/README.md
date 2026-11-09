@@ -17,7 +17,7 @@ That is real output around London Heathrow on 27 October 2026, produced by the s
 - Any ESP32 board, with the [Arduino-ESP32 core](https://github.com/espressif/arduino-esp32) 3.x (Arduino IDE: Boards Manager → "esp32" by Espressif).
 - The **ArduinoJson** library, version 7 (Library Manager).
 - Optional: an SSD1306 128×64 I2C OLED and the **Adafruit SSD1306** + **Adafruit GFX** libraries. Wire VCC to 3V3, GND to GND, SDA and SCL to your board's default I2C pins (GPIO 21 and 22 on most ESP32 DevKit boards).
-- A free API key: [get one here](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key).
+- A free API key: [get one here](https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#api-key).
 
 ## Set up
 
@@ -42,12 +42,12 @@ On a `429` the sketch waits the `Retry-After` seconds. Refused requests are not 
 
 You can, on every plan, Free included, within its limits.
 
-- **One key for the whole product.** Every unit's requests count on that key. Size it as requests per minute per unit × units: the [plans](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#piani).
+- **One key for the whole product.** Every unit's requests count on that key. Size it as requests per minute per unit × units: the [plans](https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#piani).
 - **From a few dozen units, use your own server.** A key in firmware can be extracted, and usage grows with every unit sold. Let your server fetch once (your customers' area, or the whole world on Pro) and have the units ask it: [`cache_server.py`](../../python/cache_server.py). That stays at 86,400 requests a month however many units you sell.
 - **Credit the data** on the device, in its manual or on the product page: `Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0`. The OLED version shows the short form at the bottom of the screen.
 - The feeder perk (Pro's limits and features for people who run a receiver) is for non-commercial use: it doesn't cover units you sell.
 
-More in the [displays and devices guide](https://flyitalyadsb.com/en/data/products/displays-and-devices/?utm_source=github&utm_campaign=adsb-api).
+More in the [displays and devices guide](https://flyitalyadsb.com/data/products/displays-and-devices/?utm_source=github&utm_campaign=adsb-api).
 
 ## TLS
 

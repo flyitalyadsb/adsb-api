@@ -249,16 +249,16 @@ def test_request_reaches_other_endpoints(api: FakeApi) -> None:
 # ------------------------------------------------------------- limits and errors
 
 def test_radius_above_the_plan(api: FakeApi) -> None:
-    plans = "https://flyitalyadsb.com/en/data/api/?utm_source=api&utm_campaign=limit_radius#piani"
+    plans = "https://flyitalyadsb.com/data/api/?utm_source=api&utm_campaign=limit_radius#piani"
     api.add("GET", "/v2/lat/0/lon/0/dist/20040", reply(403, {
         "error": "dist above the free plan maximum of 500 km", "max_radius_km": 500, "plans": plans,
-        "help": "https://flyitalyadsb.com/en/faq/#errore-403-raggio"}))
+        "help": "https://flyitalyadsb.com/faq/#errore-403-raggio"}))
     c = client(api)
     with pytest.raises(PlanLimitError) as info:
         c.world()
     e = info.value
     assert (e.status, e.reason, e.max_radius_km, e.plans_url) == (403, "radius", 500, plans)
-    assert e.help_url == "https://flyitalyadsb.com/en/faq/#errore-403-raggio"
+    assert e.help_url == "https://flyitalyadsb.com/faq/#errore-403-raggio"
     assert e.limits is not None and e.limits.plan == "free"
     assert "500 km" in str(e) and plans in str(e)
     assert len(api.requests) == 1  # a 403 is never retried
@@ -267,7 +267,7 @@ def test_radius_above_the_plan(api: FakeApi) -> None:
 def test_monthly_quota_is_not_retried(api: FakeApi) -> None:
     api.add("GET", "/v2/mil", reply(429, {"error": "monthly request quota of this plan exhausted",
                                           "plan": "free", "quota_month": 300000, "resets": "2026-12-01",
-                                          "help": "https://flyitalyadsb.com/en/faq/#errore-429"}))
+                                          "help": "https://flyitalyadsb.com/faq/#errore-429"}))
     with pytest.raises(PlanLimitError) as info:
         client(api).military()
     e = info.value
@@ -336,7 +336,7 @@ def test_overflights_limit_and_paid_plan(api: FakeApi) -> None:
 
 def test_bad_key(api: FakeApi) -> None:
     api.add("GET", "/v2/mil", reply(401, {"error": "missing or invalid X-Api-Key",
-                                          "help": "https://flyitalyadsb.com/en/faq/#errore-401"}))
+                                          "help": "https://flyitalyadsb.com/faq/#errore-401"}))
     with pytest.raises(AuthError) as info:
         client(api).military()
     assert info.value.status == 401 and "invalid X-Api-Key" in str(info.value)

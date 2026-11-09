@@ -6,7 +6,7 @@
 
 - Base URL: `https://api.flyitalyadsb.com/v2`. Auth: header `X-Api-Key: <key>` on every request. JSON responses.
 - ADS-B Exchange v2 format: `https://api.flyitalyadsb.com/api/aircraft/v2`. It has the same paths (`/hex`, `/icao`, `/callsign`, `/registration`, `/sqk`, `/mil`, `/lat/{lat}/lon/{lon}/dist/{nm}`, `/point`, `/closest`), the same key headers (`api-auth`, `X-RapidAPI-Key` or `X-Api-Key`) and the same JSON (`{ac, msg, now (ms), total, ctime, ptime}`, radius in nautical miles) as the ADS-B Exchange v2 API, with the same key and limits. Code written for it only changes host and key.
-- Get a key: https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key (email only, no approval; the same key works for the MCP server).
+- Get a key: https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#api-key (email only, no approval; the same key works for the MCP server).
 - Main call: `GET /v2/lat/{lat}/lon/{lon}/dist/{km}` returns `{"now": <unix seconds>, "count", "total", "ac": [ ... ]}`, every aircraft within `km` kilometres (not nautical miles) of the point. Records are readsb aircraft.json: `hex`, `flight` (callsign, space-padded), `r` (registration), `t` (ICAO type), `lat`, `lon`, `alt_baro` (feet, or "ground"), `alt_geom`, `gs` (knots), `track`, `baro_rate` (ft/min), `squawk`, `category`, `dbFlags` (1 military, 2 interesting, 4 PIA, 8 LADD), `type` (position source: adsb_icao, mlat, ...), `seen_pos` (seconds).
 - Other endpoints: `/icao/{hex}`, `/callsign/{callsign}`, `/reg/{reg}` (one aircraft object, 404 if not seen now), `/mil`, `/pia`, `/ladd`, `/sqk/{squawk}`, `/type/{type}`, `/profile/{icao}`, `/history/{icao}[/{YYYY-MM-DD}]`, `/overflights?lat=&lon=&dist=&from=&to=`, `/events?lat=&lon=&dist=`, `POST /webhooks` (paid plans).
 - Not in the data: routes (departure/arrival airports), airlines, schedules, photos. Unfiltered: military, PIA and LADD aircraft are flagged, not hidden.
@@ -14,7 +14,7 @@
 <!-- sync:coverage:start -->
 - Where the receivers are: of those that share their position, about 36% are in the United States, 15% in Germany, 11% in the UK and Ireland and 16% in the rest of Europe; Asia, Australia and New Zealand follow; Latin America and Africa are thinner; Italy is about 3% (26 October 2026).
 <!-- sync:coverage:end -->
-- Coverage check without a key: `GET https://api.flyitalyadsb.com/api/coverage?lat=&lon=&radius=` (25/50/100/200 km, 30 requests/min per IP; send a User-Agent of your own), or https://flyitalyadsb.com/en/data/coverage/?utm_source=github&utm_campaign=adsb-api
+- Coverage check without a key: `GET https://api.flyitalyadsb.com/api/coverage?lat=&lon=&radius=` (25/50/100/200 km, 30 requests/min per IP; send a User-Agent of your own), or https://flyitalyadsb.com/data/coverage/?utm_source=github&utm_campaign=adsb-api
 
 ## Plans (prices before tax, monthly)
 
@@ -27,23 +27,23 @@
 - Whole world in one request (`/lat/0/lon/0/dist/20040`): Pro or Fleet.
 <!-- sync:plans:end -->
 - Over a limit: 429 (Retry-After) or 403 (radius); refused requests are not counted and never billed. No SLA on any plan; paid plans help cover server and bandwidth costs.
-- Feeders (people who run a receiver for the network) get Pro's limits and features on their Free keys at no cost, for non-commercial use: https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api
-- More than 25 watched aircraft, more volume, an SLA, or reselling the data as an API or feed for other people's products: https://flyitalyadsb.com/en/contact/?utm_source=github&utm_campaign=adsb-api
-- Current plans: https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#piani
+- Feeders (people who run a receiver for the network) get Pro's limits and features on their Free keys at no cost, for non-commercial use: https://flyitalyadsb.com/community/feeder/?utm_source=github&utm_campaign=adsb-api
+- More than 25 watched aircraft, more volume, an SLA, or reselling the data as an API or feed for other people's products: https://flyitalyadsb.com/contact/?utm_source=github&utm_campaign=adsb-api
+- Current plans: https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#piani
 
 ## Using it in a product
 
 - Allowed on every plan, Free included, in apps and devices you sell. One key per product: all devices, users and servers count on it.
 - Your own server may fetch and cache the data to serve your own users (not redistribution). Keep the key on your server when you can: a key in firmware or a web page can be extracted.
 - Credit where users see the data: "Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0". Your code, artwork and design stay yours.
-- Rules as Q&A: https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api
-- Terms: https://flyitalyadsb.com/en/terms/?utm_source=github&utm_campaign=adsb-api
+- Rules as Q&A: https://flyitalyadsb.com/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api
+- Terms: https://flyitalyadsb.com/terms/?utm_source=github&utm_campaign=adsb-api
 
 ## AI assistants (MCP)
 
 - MCP server: `https://flyitalyadsb.com/mcp` (Streamable HTTP), official MCP registry name `com.flyitalyadsb/mcp`. OAuth for claude.ai-style connectors, or `X-Api-Key` with the same key.
 - Tools: find_aircraft, aircraft_near, special_traffic, aircraft_history, aircraft_profile, overflights, notable_traffic, set_my_location, clear_my_location. Each call counts as one request.
-- Guide: https://flyitalyadsb.com/en/data/mcp/?utm_source=github&utm_campaign=adsb-api
+- Guide: https://flyitalyadsb.com/data/mcp/?utm_source=github&utm_campaign=adsb-api
 
 ## In this repository
 
@@ -53,7 +53,7 @@
 
 ## More
 
-- API documentation: https://flyitalyadsb.com/en/data/api/docs/?utm_source=github&utm_campaign=adsb-api
-- ADS-B API comparison (rate limits, feeder requirements, commercial terms of the open ADS-B APIs): https://flyitalyadsb.com/en/data/comparison/?utm_source=github&utm_campaign=adsb-api
-- FAQ: https://flyitalyadsb.com/en/faq/?utm_source=github&utm_campaign=adsb-api
+- API documentation: https://flyitalyadsb.com/data/api/docs/?utm_source=github&utm_campaign=adsb-api
+- ADS-B API comparison (rate limits, feeder requirements, commercial terms of the open ADS-B APIs): https://flyitalyadsb.com/data/comparison/?utm_source=github&utm_campaign=adsb-api
+- FAQ: https://flyitalyadsb.com/faq/?utm_source=github&utm_campaign=adsb-api
 - The site's own llms.txt: https://flyitalyadsb.com/llms.txt

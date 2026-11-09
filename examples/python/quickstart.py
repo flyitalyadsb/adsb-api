@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Every aircraft within 25 km of London Heathrow, right now.
 
-    export FLYITALYADSB_API_KEY=...   # free: https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key
+    export FLYITALYADSB_API_KEY=...   # free: https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#api-key
     python3 quickstart.py
 
 Python 3.8+, standard library only.

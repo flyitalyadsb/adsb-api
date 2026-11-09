@@ -1,6 +1,6 @@
 # flyitalyadsb: official Python client for the FlyItalyADSB ADS-B API
 
-**flyitalyadsb** is the official Python client for the [FlyItalyADSB](https://flyitalyadsb.com/en/data/api/?utm_source=pypi&utm_campaign=python-client) ADS-B API: live and historical aircraft positions as JSON for any point on Earth, from a community network of about 3,200 ADS-B and MLAT receivers. Commercial use is allowed on every plan, Free included. The Free key is self-serve and answers up to 500 km around a point; the Pro plan (€49/month) returns the whole world in one request. The data is unfiltered: military, PIA and LADD aircraft are flagged, not removed, and the network's own MLAT locates aircraft that don't broadcast a position. Beyond live positions there are per-aircraft history, overflights of a place, notable-traffic events and an MCP server for AI assistants. Standard library only (no dependencies), fully typed, Python 3.9+.
+**flyitalyadsb** is the official Python client for the [FlyItalyADSB](https://flyitalyadsb.com/data/api/?utm_source=pypi&utm_campaign=python-client) ADS-B API: live and historical aircraft positions as JSON for any point on Earth, from a community network of about 3,200 ADS-B and MLAT receivers. Commercial use is allowed on every plan, Free included. The Free key is self-serve and answers up to 500 km around a point; the Pro plan (€49/month) returns the whole world in one request. The data is unfiltered: military, PIA and LADD aircraft are flagged, not removed, and the network's own MLAT locates aircraft that don't broadcast a position. Beyond live positions there are per-aircraft history, overflights of a place, notable-traffic events and an MCP server for AI assistants. Standard library only (no dependencies), fully typed, Python 3.9+.
 
 ```bash
 pip install flyitalyadsb
@@ -8,7 +8,7 @@ pip install flyitalyadsb
 
 ## Quickstart
 
-Get a free key with your email on the [API page](https://flyitalyadsb.com/en/data/api/?utm_source=pypi&utm_campaign=python-client#api-key) (no approval step), then:
+Get a free key with your email on the [API page](https://flyitalyadsb.com/data/api/?utm_source=pypi&utm_campaign=python-client#api-key) (no approval step), then:
 
 ```python
 from flyitalyadsb import Client
@@ -54,7 +54,7 @@ Every method is one request on your key; the account calls through `request()` (
 | `request(method, path, params=, body=)` | any other, e.g. `/me/location`, `/webhooks` | the parsed JSON |
 | `request_key(email, found_via="pypi", audience=, other_source=)` (a function) | `POST /keys` | asks for a free key: the address gets a one-time link. Never called for you |
 
-`Aircraft` has typed fields with readable names (`callsign`, `registration`, `icao_type`, `lat`, `lon`, `altitude` in feet or `"ground"`, `ground_speed` in knots, `vertical_rate` in ft/min, `squawk`, `source` such as `adsb_icao` or `mlat`, `db_flags`) and the flags `military`, `interesting`, `pia`, `ladd`, `on_ground` and `from_mlat`. Every field the API sent stays available with its own name in `raw` and through `get()`, e.g. `a.get("nav_altitude_mcp")`. Lists are iterable and have `len()`. Every result keeps the full JSON in `raw`. The fields and units: [fields and units](https://flyitalyadsb.com/en/data/api/docs/fields/?utm_source=pypi&utm_campaign=python-client).
+`Aircraft` has typed fields with readable names (`callsign`, `registration`, `icao_type`, `lat`, `lon`, `altitude` in feet or `"ground"`, `ground_speed` in knots, `vertical_rate` in ft/min, `squawk`, `source` such as `adsb_icao` or `mlat`, `db_flags`) and the flags `military`, `interesting`, `pia`, `ladd`, `on_ground` and `from_mlat`. Every field the API sent stays available with its own name in `raw` and through `get()`, e.g. `a.get("nav_altitude_mcp")`. Lists are iterable and have `len()`. Every result keeps the full JSON in `raw`. The fields and units: [fields and units](https://flyitalyadsb.com/data/api/docs/fields/?utm_source=pypi&utm_campaign=python-client).
 
 ```python
 from datetime import datetime, timedelta, timezone
@@ -91,7 +91,7 @@ Choose mostly by area: each request asks for the aircraft in a circle, and the l
 - A paid plan raises the limits of the key you already have.
 - Requests refused for a limit are not counted, and nothing is ever billed beyond the plan.
 - The monthly counter resets on the 1st. No plan includes an SLA: the service is best effort.
-- Current prices and limits are always on the [plans page](https://flyitalyadsb.com/en/data/api/?utm_source=pypi&utm_campaign=python-client#piani).
+- Current prices and limits are always on the [plans page](https://flyitalyadsb.com/data/api/?utm_source=pypi&utm_campaign=python-client#piani).
 
 `client.limits` (and `.limits` on every result) reports the key's state from the `X-FIA-Plan`, `X-FIA-Limit-Per-Min`, `X-FIA-Quota-Month` and `X-FIA-Used-Month` headers: `plan`, `limit_per_min`, `quota_month`, `used_month` and `remaining_month`.
 
@@ -128,7 +128,7 @@ The client never hammers the API. On a 429 or 503 that carries `Retry-After` of 
 
 - One record per aircraft in readsb's aircraft.json format: ICAO address, position, altitude, speed, track, vertical rate, squawk, category, and the military, PIA and LADD flags. Registration and ICAO type are present for about 99% of aircraft, callsign for about 98%.
 - Unfiltered: military, PIA and LADD aircraft are flagged, not hidden. Positions from ADS-B and from the network's own MLAT, which covers many military aircraft.
-- The picture refreshes every half second. Coverage follows the receivers, worldwide: check an area with the [coverage tool](https://flyitalyadsb.com/en/data/coverage/?utm_source=pypi&utm_campaign=python-client) before you build on it.
+- The picture refreshes every half second. Coverage follows the receivers, worldwide: check an area with the [coverage tool](https://flyitalyadsb.com/data/coverage/?utm_source=pypi&utm_campaign=python-client) before you build on it.
 - History: per-aircraft daily tracks for every day since 2026-08-17, plus 2022 to 2024 with gaps. Overflights of a place since 2026-08-17.
 - Not included: routes (departure and arrival airports), schedules and photos.
 
@@ -140,7 +140,7 @@ The flight data is licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/
 Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0
 ```
 
-The same line is `flyitalyadsb.ATTRIBUTION`. Share-alike covers the data and adapted versions of it (a dataset, feed or API built from it), not your product's code, artwork or design. Details: [using the data in a product](https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=pypi&utm_campaign=python-client) and the [terms of service](https://flyitalyadsb.com/en/terms/?utm_source=pypi&utm_campaign=python-client).
+The same line is `flyitalyadsb.ATTRIBUTION`. Share-alike covers the data and adapted versions of it (a dataset, feed or API built from it), not your product's code, artwork or design. Details: [using the data in a product](https://flyitalyadsb.com/data/products/using-the-data/?utm_source=pypi&utm_campaign=python-client) and the [terms of service](https://flyitalyadsb.com/terms/?utm_source=pypi&utm_campaign=python-client).
 
 The code of this package is [MIT](https://github.com/flyitalyadsb/adsb-api/blob/main/python/LICENSE); the data it returns is not MIT (see [NOTICE](https://github.com/flyitalyadsb/adsb-api/blob/main/python/NOTICE)).
 
@@ -153,15 +153,15 @@ claude mcp add --transport http flyitalyadsb https://flyitalyadsb.com/mcp \
   --header "X-Api-Key: $FLYITALYADSB_API_KEY"
 ```
 
-Guide: [MCP and AI agents](https://flyitalyadsb.com/en/data/mcp/?utm_source=pypi&utm_campaign=python-client).
+Guide: [MCP and AI agents](https://flyitalyadsb.com/data/mcp/?utm_source=pypi&utm_campaign=python-client).
 
 ## Links
 
-- [API page: plans and a free key](https://flyitalyadsb.com/en/data/api/?utm_source=pypi&utm_campaign=python-client)
-- [API documentation](https://flyitalyadsb.com/en/data/api/docs/?utm_source=pypi&utm_campaign=python-client): [endpoints](https://flyitalyadsb.com/en/data/api/docs/endpoints/?utm_source=pypi&utm_campaign=python-client), [limits and errors](https://flyitalyadsb.com/en/data/api/docs/limits-and-errors/?utm_source=pypi&utm_campaign=python-client), [history](https://flyitalyadsb.com/en/data/api/docs/history/?utm_source=pypi&utm_campaign=python-client), [alerts and webhooks](https://flyitalyadsb.com/en/data/api/docs/alerts/?utm_source=pypi&utm_campaign=python-client), [commercial use](https://flyitalyadsb.com/en/data/api/docs/commercial-use/?utm_source=pypi&utm_campaign=python-client)
+- [API page: plans and a free key](https://flyitalyadsb.com/data/api/?utm_source=pypi&utm_campaign=python-client)
+- [API documentation](https://flyitalyadsb.com/data/api/docs/?utm_source=pypi&utm_campaign=python-client): [endpoints](https://flyitalyadsb.com/data/api/docs/endpoints/?utm_source=pypi&utm_campaign=python-client), [limits and errors](https://flyitalyadsb.com/data/api/docs/limits-and-errors/?utm_source=pypi&utm_campaign=python-client), [history](https://flyitalyadsb.com/data/api/docs/history/?utm_source=pypi&utm_campaign=python-client), [alerts and webhooks](https://flyitalyadsb.com/data/api/docs/alerts/?utm_source=pypi&utm_campaign=python-client), [commercial use](https://flyitalyadsb.com/data/api/docs/commercial-use/?utm_source=pypi&utm_campaign=python-client)
 - [OpenAPI 3.1 spec](https://flyitalyadsb.com/openapi.json)
 - [Examples and source on GitHub](https://github.com/flyitalyadsb/adsb-api) (curl, Python, Node.js, ESP32)
-- [Service status](https://flyitalyadsb.com/en/status/?utm_source=pypi&utm_campaign=python-client) · [Contact](https://flyitalyadsb.com/en/contact/?utm_source=pypi&utm_campaign=python-client)
+- [Service status](https://flyitalyadsb.com/status/?utm_source=pypi&utm_campaign=python-client) · [Contact](https://flyitalyadsb.com/contact/?utm_source=pypi&utm_campaign=python-client)
 
 Found a bug in the client? [Open an issue](https://github.com/flyitalyadsb/adsb-api/issues).
 

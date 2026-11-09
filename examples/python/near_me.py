@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Aircraft near me: the aircraft around a point, nearest first.
 
-    export FLYITALYADSB_API_KEY=...         # free: https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key
+    export FLYITALYADSB_API_KEY=...         # free: https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#api-key
     python3 near_me.py 51.47 -0.45          # 25 km around London Heathrow
     python3 near_me.py 40.64 -73.78 -r 50   # 50 km around New York JFK
     python3 near_me.py 45.46 9.19 --watch 30
@@ -102,7 +102,7 @@ def main():
     key = os.environ.get("FLYITALYADSB_API_KEY")
     if not key:
         sys.exit("Set FLYITALYADSB_API_KEY: a free key takes a minute at "
-                 "https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key")
+                 "https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#api-key")
 
     try:
         lat, lon = args.lat, args.lon
@@ -110,7 +110,7 @@ def main():
             saved = get("/me/location", key)["location"]  # not counted as a request
             if not saved:
                 sys.exit("No position saved on this key: pass LAT LON, or save one in My API "
-                         "(https://flyitalyadsb.com/en/data/api/account/?utm_source=github&utm_campaign=adsb-api).")
+                         "(https://flyitalyadsb.com/data/api/account/?utm_source=github&utm_campaign=adsb-api).")
             lat, lon = saved["lat"], saved["lon"]
         while True:
             try:
