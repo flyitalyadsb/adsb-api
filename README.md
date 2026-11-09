@@ -2,8 +2,8 @@
 
 **Live aircraft positions as JSON, for any point on Earth.** One `curl` returns every aircraft within a radius of a point (position, altitude, speed, callsign, registration, type, squawk, military/PIA/LADD flags), from a community network of <!-- sync:receivers:start -->about 3,200<!-- sync:receivers:end --> ADS-B and MLAT receivers. The key is free and self-serve, and commercial use is allowed on every plan, Free included, within its limits.
 
-[Get a free API key](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key) ·
-[API docs](https://flyitalyadsb.com/en/data/api/docs/?utm_source=github&utm_campaign=adsb-api) ·
+[Get a free API key](https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#api-key) ·
+[API docs](https://flyitalyadsb.com/data/api/docs/?utm_source=github&utm_campaign=adsb-api) ·
 [OpenAPI spec](openapi/openapi.json) ·
 [Examples](#examples) ·
 [Python client](python/README.md) ·
@@ -19,7 +19,7 @@ curl -H "X-Api-Key: $FLYITALYADSB_API_KEY" \
 
 ## Quickstart (30 seconds)
 
-1. **Get a key.** Enter your email on the [API page](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#api-key). You get a link that shows the key once. There is no approval step.
+1. **Get a key.** Enter your email on the [API page](https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#api-key). You get a link that shows the key once. There is no approval step.
 2. **Keep it out of your code.**
    ```bash
    export FLYITALYADSB_API_KEY=your-key   # or put it in a git-ignored .env, see .env.example
@@ -43,7 +43,7 @@ curl -H "X-Api-Key: $FLYITALYADSB_API_KEY" \
      ]
    }
    ```
-   Altitudes are in feet (`alt_baro` is the string `"ground"` on the ground), speeds in knots, vertical rate in ft/min. `flight` is space-padded: trim it. Every field: [fields and units](https://flyitalyadsb.com/en/data/api/docs/fields/?utm_source=github&utm_campaign=adsb-api).
+   Altitudes are in feet (`alt_baro` is the string `"ground"` on the ground), speeds in knots, vertical rate in ft/min. `flight` is space-padded: trim it. Every field: [fields and units](https://flyitalyadsb.com/data/api/docs/fields/?utm_source=github&utm_campaign=adsb-api).
 
 ## Python client
 
@@ -93,15 +93,15 @@ Existing code only changes the host and the key:
 + https://api.flyitalyadsb.com/api/aircraft/v2/lat/51.47/lon/-0.45/dist/25/
 ```
 
-Same key, plans and limits as `/v2`. Details: [ADS-B Exchange v2 compatibility](https://flyitalyadsb.com/en/data/api/docs/adsbx-v2/?utm_source=github&utm_campaign=adsb-api).
+Same key, plans and limits as `/v2`. Details: [ADS-B Exchange v2 compatibility](https://flyitalyadsb.com/data/api/docs/adsbx-v2/?utm_source=github&utm_campaign=adsb-api).
 
-The `/v2` base above is our own format: radius in **kilometres**, `/icao`, `/callsign` and `/reg` return the aircraft object rather than a list, and `now` is in seconds. Details: [migration notes](https://flyitalyadsb.com/en/data/api/docs/endpoints/?utm_source=github&utm_campaign=adsb-api#migrating).
+The `/v2` base above is our own format: radius in **kilometres**, `/icao`, `/callsign` and `/reg` return the aircraft object rather than a list, and `now` is in seconds. Details: [migration notes](https://flyitalyadsb.com/data/api/docs/endpoints/?utm_source=github&utm_campaign=adsb-api#migrating).
 
 ## What people build with it
 
-- **Desk, LED and e-paper flight displays** (ESP32, Raspberry Pi): "what's that plane over my house". The biggest group. Start from the [ESP32 sketch](examples/esp32/planes-overhead/) and the [displays and devices guide](https://flyitalyadsb.com/en/data/products/displays-and-devices/?utm_source=github&utm_campaign=adsb-api).
-- **Plane-spotting apps and websites**: live traffic around airports, rare types (`/type/{type}`), aircraft profiles. See the [apps guide](https://flyitalyadsb.com/en/data/products/apps/?utm_source=github&utm_campaign=adsb-api) (key on your server, one cache for all users).
-- **Drones and search-and-rescue awareness**: what's flying low nearby. Read the [drones guide](https://flyitalyadsb.com/en/data/products/drones/?utm_source=github&utm_campaign=adsb-api) first. This is not a certified tool and never for collision avoidance.
+- **Desk, LED and e-paper flight displays** (ESP32, Raspberry Pi): "what's that plane over my house". The biggest group. Start from the [ESP32 sketch](examples/esp32/planes-overhead/) and the [displays and devices guide](https://flyitalyadsb.com/data/products/displays-and-devices/?utm_source=github&utm_campaign=adsb-api).
+- **Plane-spotting apps and websites**: live traffic around airports, rare types (`/type/{type}`), aircraft profiles. See the [apps guide](https://flyitalyadsb.com/data/products/apps/?utm_source=github&utm_campaign=adsb-api) (key on your server, one cache for all users).
+- **Drones and search-and-rescue awareness**: what's flying low nearby. Read the [drones guide](https://flyitalyadsb.com/data/products/drones/?utm_source=github&utm_campaign=adsb-api) first. This is not a certified tool and never for collision avoidance.
 - **OSINT and military traffic**: unfiltered data, military aircraft included (many via MLAT), `/mil`, `/events`.
 - **Aircraft noise monitoring**: `/overflights` answers "what flew over this address between 6 and 7 am", with the closest distance and the lowest altitude. See [overflights.py](examples/python/overflights.py).
 - **Helicopter tracking**: rotorcraft that broadcast an emitter category carry `category: "A7"`; or query a type such as `/type/EC35`.
@@ -137,7 +137,7 @@ On top of plain ADS-B, the network's own multilateration (MLAT) locates aircraft
 
 Check your area before you build on it:
 
-- the [coverage tool](https://flyitalyadsb.com/en/data/coverage/?utm_source=github&utm_campaign=adsb-api): aircraft seen in the last 24 hours, position freshness and receivers around any place;
+- the [coverage tool](https://flyitalyadsb.com/data/coverage/?utm_source=github&utm_campaign=adsb-api): aircraft seen in the last 24 hours, position freshness and receivers around any place;
 - the same as JSON, no key needed (30 requests a minute per IP):
   ```bash
   curl -A "my-app/1.0" "https://api.flyitalyadsb.com/api/coverage?lat=45.46&lon=9.19&radius=100"
@@ -168,10 +168,10 @@ Choose mostly by area: each request asks for the aircraft in a circle, and the l
 - The monthly counter resets on the 1st.
 - Every response carries `X-FIA-Plan`, `X-FIA-Limit-Per-Min`, `X-FIA-Quota-Month` and `X-FIA-Used-Month`.
 - No plan includes an SLA or guaranteed response times; the service is best effort.
-- **Run a receiver?** Feeders get Pro's limits and features on their Free keys at no cost, for non-commercial use. It's how the network grows: [become a feeder](https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api), then turn the perk on in [My API](https://flyitalyadsb.com/en/data/api/account/?utm_source=github&utm_campaign=adsb-api).
-- More than 25 watched aircraft, more volume, an SLA, or reselling the data as an API or feed for other people's products: [get in touch](https://flyitalyadsb.com/en/contact/?utm_source=github&utm_campaign=adsb-api).
+- **Run a receiver?** Feeders get Pro's limits and features on their Free keys at no cost, for non-commercial use. It's how the network grows: [become a feeder](https://flyitalyadsb.com/community/feeder/?utm_source=github&utm_campaign=adsb-api), then turn the perk on in [My API](https://flyitalyadsb.com/data/api/account/?utm_source=github&utm_campaign=adsb-api).
+- More than 25 watched aircraft, more volume, an SLA, or reselling the data as an API or feed for other people's products: [get in touch](https://flyitalyadsb.com/contact/?utm_source=github&utm_campaign=adsb-api).
 
-Current prices and limits are always on the [plans page](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api#piani).
+Current prices and limits are always on the [plans page](https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#piani).
 
 ## Licence and credit
 
@@ -181,7 +181,7 @@ The only thing we ask is a credit with the licence, where your users see the dat
 Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0
 ```
 
-If space is tight: `Data: flyitalyadsb.com (CC BY-SA 4.0)`. Your app's code, artwork and design stay yours. The details are in [using the data in a product](https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api#licence) and the [terms of service](https://flyitalyadsb.com/en/terms/?utm_source=github&utm_campaign=adsb-api).
+If space is tight: `Data: flyitalyadsb.com (CC BY-SA 4.0)`. Your app's code, artwork and design stay yours. The details are in [using the data in a product](https://flyitalyadsb.com/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api#licence) and the [terms of service](https://flyitalyadsb.com/terms/?utm_source=github&utm_campaign=adsb-api).
 
 **This repository:** the code (examples, scripts and the [Python client](python/)) is [MIT](LICENSE). The flight data the API returns is not MIT: it is CC BY-SA 4.0 under the API terms. See [NOTICE](NOTICE).
 
@@ -201,11 +201,11 @@ A credit line with the licence: `Flight data: FlyItalyADSB (flyitalyadsb.com), C
 
 ### What's the coverage in my area?
 
-Check it with the [coverage tool](https://flyitalyadsb.com/en/data/coverage/?utm_source=github&utm_campaign=adsb-api) or its keyless JSON (see [Coverage](#coverage)), or try a request with a Free key.
+Check it with the [coverage tool](https://flyitalyadsb.com/data/coverage/?utm_source=github&utm_campaign=adsb-api) or its keyless JSON (see [Coverage](#coverage)), or try a request with a Free key.
 
 ### Which plan do I need, and what happens over the limit?
 
-Pick by radius first, then size the volume as requests per minute per device × devices, and compare with the [plans table](#plans-and-limits). One device asking every 30 seconds makes 86,400 requests a month; a server fetching once every 30 seconds for any number of users is also 86,400 a month. Over a limit you get 429 or 403, never a bill. More worked examples: [plan and limits](https://flyitalyadsb.com/en/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api#plan).
+Pick by radius first, then size the volume as requests per minute per device × devices, and compare with the [plans table](#plans-and-limits). One device asking every 30 seconds makes 86,400 requests a month; a server fetching once every 30 seconds for any number of users is also 86,400 a month. Over a limit you get 429 or 403, never a bill. More worked examples: [plan and limits](https://flyitalyadsb.com/data/products/using-the-data/?utm_source=github&utm_campaign=adsb-api#plan).
 
 ### Are routes, military aircraft and squawk codes in the data?
 
@@ -216,7 +216,7 @@ Pick by radius first, then size the volume as requests per minute per device × 
 
 ### Is there history?
 
-Yes, self-serve with the same key: per-aircraft daily tracks since 2022 (with gaps; every day since 2026-08-17) and overflights of a place since 2026-08-17. See [history](https://flyitalyadsb.com/en/data/api/docs/history/?utm_source=github&utm_campaign=adsb-api).
+Yes, self-serve with the same key: per-aircraft daily tracks since 2022 (with gaps; every day since 2026-08-17) and overflights of a place since 2026-08-17. See [history](https://flyitalyadsb.com/data/api/docs/history/?utm_source=github&utm_campaign=adsb-api).
 
 ### Can I call it from a web page?
 
@@ -224,13 +224,13 @@ CORS is open, but a key in a web page is public. Call the API from your server.
 
 ### I get an HTML page ("Attention Required", error 1010 or 1020) instead of JSON.
 
-The request was stopped before the API. Always send `X-Api-Key`, and send a `User-Agent` of your own (your app's name). If it goes on, see [limits and errors](https://flyitalyadsb.com/en/data/api/docs/limits-and-errors/?utm_source=github&utm_campaign=adsb-api#blocked-by-cloudflare).
+The request was stopped before the API. Always send `X-Api-Key`, and send a `User-Agent` of your own (your app's name). If it goes on, see [limits and errors](https://flyitalyadsb.com/data/api/docs/limits-and-errors/?utm_source=github&utm_campaign=adsb-api#blocked-by-cloudflare).
 
 ### How does it compare with other ADS-B APIs?
 
-See the factual [ADS-B API comparison](https://flyitalyadsb.com/en/data/comparison/?utm_source=github&utm_campaign=adsb-api): rate limits, feeder requirements and commercial-use terms of each. Code written for ADS-B Exchange works here unchanged in [its format](#coming-from-ads-b-exchange): change the host and the key.
+See the factual [ADS-B API comparison](https://flyitalyadsb.com/data/comparison/?utm_source=github&utm_campaign=adsb-api): rate limits, feeder requirements and commercial-use terms of each. Code written for ADS-B Exchange works here unchanged in [its format](#coming-from-ads-b-exchange): change the host and the key.
 
-More answers in the [FAQ](https://flyitalyadsb.com/en/faq/?utm_source=github&utm_campaign=adsb-api).
+More answers in the [FAQ](https://flyitalyadsb.com/faq/?utm_source=github&utm_campaign=adsb-api).
 
 ## Use it from an AI assistant (MCP)
 
@@ -243,7 +243,7 @@ The same data is available to Claude, ChatGPT and other assistants through an MC
     --header "X-Api-Key: $FLYITALYADSB_API_KEY"
   ```
 
-Tools: `find_aircraft`, `aircraft_near`, `special_traffic`, `aircraft_history`, `aircraft_profile`, `overflights`, `notable_traffic`, `set_my_location`, `clear_my_location`. Each tool call counts as one request on your key. Guide: [MCP and AI agents](https://flyitalyadsb.com/en/data/mcp/?utm_source=github&utm_campaign=adsb-api).
+Tools: `find_aircraft`, `aircraft_near`, `special_traffic`, `aircraft_history`, `aircraft_profile`, `overflights`, `notable_traffic`, `set_my_location`, `clear_my_location`. Each tool call counts as one request on your key. Guide: [MCP and AI agents](https://flyitalyadsb.com/data/mcp/?utm_source=github&utm_campaign=adsb-api).
 
 For agents and LLMs: [`llms.txt`](llms.txt) in this repository summarises the API, and the site publishes [its own](https://flyitalyadsb.com/llms.txt) plus an [API catalog](https://flyitalyadsb.com/.well-known/api-catalog).
 
@@ -262,12 +262,12 @@ python3 scripts/sync.py --dry-run   # what would change; exit 1 if the repo is o
 
 ## Links
 
-- [REST API page, plans and free key](https://flyitalyadsb.com/en/data/api/?utm_source=github&utm_campaign=adsb-api)
-- [API documentation](https://flyitalyadsb.com/en/data/api/docs/?utm_source=github&utm_campaign=adsb-api) · [changelog](https://flyitalyadsb.com/en/data/api/docs/changelog/?utm_source=github&utm_campaign=adsb-api)
-- [For product builders](https://flyitalyadsb.com/en/data/products/?utm_source=github&utm_campaign=adsb-api)
-- [Service status](https://flyitalyadsb.com/en/status/?utm_source=github&utm_campaign=adsb-api)
-- [Become a feeder](https://flyitalyadsb.com/en/community/feeder/?utm_source=github&utm_campaign=adsb-api) · [the network](https://flyitalyadsb.com/en/network/?utm_source=github&utm_campaign=adsb-api)
-- [Contact](https://flyitalyadsb.com/en/contact/?utm_source=github&utm_campaign=adsb-api)
+- [REST API page, plans and free key](https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api)
+- [API documentation](https://flyitalyadsb.com/data/api/docs/?utm_source=github&utm_campaign=adsb-api) · [changelog](https://flyitalyadsb.com/data/api/docs/changelog/?utm_source=github&utm_campaign=adsb-api)
+- [For product builders](https://flyitalyadsb.com/data/products/?utm_source=github&utm_campaign=adsb-api)
+- [Service status](https://flyitalyadsb.com/status/?utm_source=github&utm_campaign=adsb-api)
+- [Become a feeder](https://flyitalyadsb.com/community/feeder/?utm_source=github&utm_campaign=adsb-api) · [the network](https://flyitalyadsb.com/network/?utm_source=github&utm_campaign=adsb-api)
+- [Contact](https://flyitalyadsb.com/contact/?utm_source=github&utm_campaign=adsb-api)
 
 Found a problem in an example? Open an issue in this repository.
 

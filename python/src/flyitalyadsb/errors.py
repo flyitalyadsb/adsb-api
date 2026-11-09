@@ -8,9 +8,9 @@ from typing import Any, Dict, Mapping, Optional
 from .models import Limits
 
 #: Plans and prices. A paid plan raises the limits of the key you already have.
-PLANS_URL = "https://flyitalyadsb.com/en/data/api/?utm_source=python-client&utm_campaign=python-client#piani"
+PLANS_URL = "https://flyitalyadsb.com/data/api/?utm_source=python-client&utm_campaign=python-client#piani"
 #: Limits, error codes and what to do about each.
-LIMITS_DOCS_URL = "https://flyitalyadsb.com/en/data/api/docs/limits-and-errors/"
+LIMITS_DOCS_URL = "https://flyitalyadsb.com/data/api/docs/limits-and-errors/"
 
 
 class FlyItalyADSBError(Exception):
