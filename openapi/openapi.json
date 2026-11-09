@@ -4,12 +4,12 @@
     "title": "FlyItalyADSB API",
     "version": "2",
     "summary": "Live and historical aircraft positions worldwide from the FlyItalyADSB community ADS-B/MLAT network. Commercial use allowed on every plan, Free included; the whole world in one request from the Pro plan (€49/month).",
-    "description": "Unfiltered aircraft data (no FAA/LADD/BARR filtering; military aircraft included, many of them via MLAT) from a global community-run receiver network (about 3,200 receivers, densest in North America and Europe; any point on Earth can be queried), as readsb aircraft.json records (the same format as tar1090), plus an ADS-B Exchange v2–compatible variant at /api/aircraft/v2. Every endpoint except the key signup needs an X-Api-Key; keys are self-serve (see /auth.md). Plans and limits: https://flyitalyadsb.com/en/data/api/#piani. The same key works on the MCP server at https://flyitalyadsb.com/mcp. The same data is also served in the ADS-B Exchange v2 format (same paths, key headers and JSON; radius in nautical miles) at https://api.flyitalyadsb.com/api/aircraft/v2, documented at https://flyitalyadsb.com/en/data/api/docs/adsbx-v2/.",
-    "termsOfService": "https://flyitalyadsb.com/en/terms/",
+    "description": "Unfiltered aircraft data (no FAA/LADD/BARR filtering; military aircraft included, many of them via MLAT) from a global community-run receiver network (about 3,200 receivers, densest in North America and Europe; any point on Earth can be queried), as readsb aircraft.json records (the same format as tar1090), plus an ADS-B Exchange v2–compatible variant at /api/aircraft/v2. Every endpoint except the key signup needs an X-Api-Key; keys are self-serve (see /auth.md). Plans and limits: https://flyitalyadsb.com/data/api/#piani. The same key works on the MCP server at https://flyitalyadsb.com/mcp. The same data is also served in the ADS-B Exchange v2 format (same paths, key headers and JSON; radius in nautical miles) at https://api.flyitalyadsb.com/api/aircraft/v2, documented at https://flyitalyadsb.com/data/api/docs/adsbx-v2/.",
+    "termsOfService": "https://flyitalyadsb.com/terms/",
     "contact": {
       "name": "FlyItalyADSB",
       "email": "info@flyitalyadsb.com",
-      "url": "https://flyitalyadsb.com/en/contact/"
+      "url": "https://flyitalyadsb.com/contact/"
     },
     "license": {
       "name": "Data: CC BY-SA 4.0",
@@ -18,7 +18,7 @@
   },
   "externalDocs": {
     "description": "API page: plans, endpoints, free key",
-    "url": "https://flyitalyadsb.com/en/data/api/"
+    "url": "https://flyitalyadsb.com/data/api/"
   },
   "servers": [
     {
@@ -41,7 +41,7 @@
     },
     {
       "name": "flights",
-      "description": "Flight history: the flights the network saw (departure and arrival airport, times, duration), built every night from its own tracks since 2026-10-23; yesterday and earlier; not airline schedules. How far back depends on the plan. On Fleet the aircraft and callsign answers also carry today's flights, from takeoffs and landings detected in real time. https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights"
+      "description": "Flight history: the flights the network saw (departure and arrival airport, times, duration), built every night from its own tracks since 2026-10-23; yesterday and earlier; not airline schedules. How far back depends on the plan. On Fleet the aircraft and callsign answers also carry today's flights, from takeoffs and landings detected in real time. https://flyitalyadsb.com/data/api/docs/endpoints/#observed-flights"
     },
     {
       "name": "keys",
@@ -53,22 +53,22 @@
     },
     {
       "name": "events",
-      "description": "Emergencies and notable aircraft recorded by the network: emergency squawks, military, \"interesting\". https://flyitalyadsb.com/en/data/api/docs/alerts/"
+      "description": "Emergencies and notable aircraft recorded by the network: emergency squawks, military, \"interesting\". https://flyitalyadsb.com/data/api/docs/alerts/"
     },
     {
       "name": "webhooks",
-      "description": "Signed push alerts on the same events, paid plans only; on Fleet also the takeoffs and landings of the watched aircraft. https://flyitalyadsb.com/en/data/api/docs/alerts/"
+      "description": "Signed push alerts on the same events, paid plans only; on Fleet also the takeoffs and landings of the watched aircraft. https://flyitalyadsb.com/data/api/docs/alerts/"
     },
     {
       "name": "watch",
-      "description": "The aircraft the account watches for takeoff and landing webhooks (Fleet 25). Not counted as requests. https://flyitalyadsb.com/en/data/api/docs/alerts/#aircraft"
+      "description": "The aircraft the account watches for takeoff and landing webhooks (Fleet 25). Not counted as requests. https://flyitalyadsb.com/data/api/docs/alerts/#aircraft"
     }
   ],
   "paths": {
     "/v2/icao/{hex}": {
       "get": {
         "summary": "One aircraft by ICAO address",
-        "description": "Up to 50 comma-separated values (one comma is enough, at the end too) return a list instead, counted as ONE request: `{now, count, total, ac, not_found, matched}`, each value with the same tolerant forms; then `fields` and `with` apply. Without a comma, the single aircraft or the explained 404. https://flyitalyadsb.com/en/data/api/docs/endpoints/#several-aircraft-in-one-request",
+        "description": "Up to 50 comma-separated values (one comma is enough, at the end too) return a list instead, counted as ONE request: `{now, count, total, ac, not_found, matched}`, each value with the same tolerant forms; then `fields` and `with` apply. Without a comma, the single aircraft or the explained 404. https://flyitalyadsb.com/data/api/docs/endpoints/#several-aircraft-in-one-request",
         "tags": [
           "live"
         ],
@@ -86,7 +86,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -100,7 +100,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -176,7 +176,7 @@
     "/v2/hex/{hex}": {
       "get": {
         "summary": "One aircraft by ICAO address (alias of /v2/icao)",
-        "description": "Up to 50 comma-separated values (one comma is enough, at the end too) return a list instead, counted as ONE request: `{now, count, total, ac, not_found, matched}`, each value with the same tolerant forms; then `fields` and `with` apply. Without a comma, the single aircraft or the explained 404. https://flyitalyadsb.com/en/data/api/docs/endpoints/#several-aircraft-in-one-request",
+        "description": "Up to 50 comma-separated values (one comma is enough, at the end too) return a list instead, counted as ONE request: `{now, count, total, ac, not_found, matched}`, each value with the same tolerant forms; then `fields` and `with` apply. Without a comma, the single aircraft or the explained 404. https://flyitalyadsb.com/data/api/docs/endpoints/#several-aircraft-in-one-request",
         "tags": [
           "live"
         ],
@@ -194,7 +194,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -208,7 +208,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -284,7 +284,7 @@
     "/v2/callsign/{callsign}": {
       "get": {
         "summary": "One aircraft by callsign (flight numbers tried too)",
-        "description": "Tries, in order: the callsign as written; without the zeros after the airline prefix (CPA0289 -> CPA289); the ICAO form of the airline's IATA code (FR5518 -> RYR5518, 5X1219 -> UPS1219). Some airlines (Ryanair, easyJet, Wizz Air) mostly fly alphanumeric callsigns not linked to the flight number. https://flyitalyadsb.com/en/data/api/docs/endpoints/#callsign-and-flight-number Up to 50 comma-separated values (one comma is enough, at the end too) return a list instead, counted as ONE request: `{now, count, total, ac, not_found, matched}`, each value with the same tolerant forms; then `fields` and `with` apply. Without a comma, the single aircraft or the explained 404. https://flyitalyadsb.com/en/data/api/docs/endpoints/#several-aircraft-in-one-request",
+        "description": "Tries, in order: the callsign as written; without the zeros after the airline prefix (CPA0289 -> CPA289); the ICAO form of the airline's IATA code (FR5518 -> RYR5518, 5X1219 -> UPS1219). Some airlines (Ryanair, easyJet, Wizz Air) mostly fly alphanumeric callsigns not linked to the flight number. https://flyitalyadsb.com/data/api/docs/endpoints/#callsign-and-flight-number Up to 50 comma-separated values (one comma is enough, at the end too) return a list instead, counted as ONE request: `{now, count, total, ac, not_found, matched}`, each value with the same tolerant forms; then `fields` and `with` apply. Without a comma, the single aircraft or the explained 404. https://flyitalyadsb.com/data/api/docs/endpoints/#several-aircraft-in-one-request",
         "tags": [
           "live"
         ],
@@ -302,7 +302,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -316,7 +316,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -392,7 +392,7 @@
     "/v2/reg/{reg}": {
       "get": {
         "summary": "One aircraft by registration",
-        "description": "Up to 50 comma-separated values (one comma is enough, at the end too) return a list instead, counted as ONE request: `{now, count, total, ac, not_found, matched}`, each value with the same tolerant forms; then `fields` and `with` apply. Without a comma, the single aircraft or the explained 404. https://flyitalyadsb.com/en/data/api/docs/endpoints/#several-aircraft-in-one-request",
+        "description": "Up to 50 comma-separated values (one comma is enough, at the end too) return a list instead, counted as ONE request: `{now, count, total, ac, not_found, matched}`, each value with the same tolerant forms; then `fields` and `with` apply. Without a comma, the single aircraft or the explained 404. https://flyitalyadsb.com/data/api/docs/endpoints/#several-aircraft-in-one-request",
         "tags": [
           "live"
         ],
@@ -410,7 +410,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -424,7 +424,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -500,7 +500,7 @@
     "/v2/find/{text}": {
       "get": {
         "summary": "One aircraft by callsign, flight number, registration or ICAO address",
-        "description": "For when you do not know which identifier you have: tries the text as a callsign (with the same forms as /v2/callsign), a registration (dashes ignored) and an ICAO address, and says how each airborne aircraft matched (at most one per kind, the same aircraft once). https://flyitalyadsb.com/en/data/api/docs/endpoints/#callsign-and-flight-number",
+        "description": "For when you do not know which identifier you have: tries the text as a callsign (with the same forms as /v2/callsign), a registration (dashes ignored) and an ICAO address, and says how each airborne aircraft matched (at most one per kind, the same aircraft once). https://flyitalyadsb.com/data/api/docs/endpoints/#callsign-and-flight-number",
         "tags": [
           "live"
         ],
@@ -559,7 +559,7 @@
     "/v2/lat/{lat}/lon/{lon}/dist/{dist}": {
       "get": {
         "summary": "All aircraft within a radius of a point",
-        "description": "The radius is in kilometres (ADSBx v2 uses nautical miles). The maximum radius depends on the plan: https://flyitalyadsb.com/en/data/api/#piani.",
+        "description": "The radius is in kilometres (ADSBx v2 uses nautical miles). The maximum radius depends on the plan: https://flyitalyadsb.com/data/api/#piani.",
         "tags": [
           "live"
         ],
@@ -596,7 +596,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -610,7 +610,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -673,7 +673,7 @@
     "/v2/box/{lat_south}/{lat_north}/{lon_west}/{lon_east}": {
       "get": {
         "summary": "All aircraft in a latitude/longitude box",
-        "description": "Edges included. lon_west greater than lon_east crosses the antimeridian (170/-170 = from 170 E to 170 W). The plan's maximum radius applies to the half-diagonal, the great-circle distance from the centre of the box to its farthest point; above it, the same 403 as the radius. One request. https://flyitalyadsb.com/en/data/api/docs/endpoints/#aircraft-in-a-box",
+        "description": "Edges included. lon_west greater than lon_east crosses the antimeridian (170/-170 = from 170 E to 170 W). The plan's maximum radius applies to the half-diagonal, the great-circle distance from the centre of the box to its farthest point; above it, the same 403 as the radius. One request. https://flyitalyadsb.com/data/api/docs/endpoints/#aircraft-in-a-box",
         "tags": [
           "live"
         ],
@@ -726,7 +726,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -740,7 +740,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -812,7 +812,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -826,7 +826,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -888,7 +888,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -902,7 +902,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -964,7 +964,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -978,7 +978,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -1050,7 +1050,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -1064,7 +1064,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -1136,7 +1136,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -1150,7 +1150,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -1222,7 +1222,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -1236,7 +1236,7 @@
             "name": "with",
             "in": "query",
             "required": false,
-            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of observed flights (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
+            "description": "`route` adds `route` to each aircraft whose callsign has a known route: the most frequent one in the latest 7 days of flight history (not a schedule). The field is absent when no route is known. Any other value: 400, not counted.",
             "schema": {
               "type": "string",
               "enum": [
@@ -1289,7 +1289,7 @@
     "/v2/airport/{code}/runways": {
       "get": {
         "summary": "The runway an airport is using now (estimate)",
-        "description": "Estimated from the aircraft the network sees now within 25 km of the airport: an aircraft counts for a runway end when it is below 5,000 ft above the field, lined up within 20 degrees and within 1 km of the extended centreline, and either arriving (not climbing, up to 18 km before the threshold), departing (climbing, over the runway or up to 12 km after it) or rolling on it at 40 kt or more; with parallel runways the nearest centreline wins. An estimate, not an official source: a quiet airport can show no runway (empty in_use). Runways from OurAirports (public domain), refreshed nightly. One request. https://flyitalyadsb.com/en/data/api/docs/endpoints/#runway-in-use",
+        "description": "Estimated from the aircraft the network sees now within 25 km of the airport: an aircraft counts for a runway end when it is below 5,000 ft above the field, lined up within 20 degrees and within 1 km of the extended centreline, and either arriving (not climbing, up to 18 km before the threshold), departing (climbing, over the runway or up to 12 km after it) or rolling on it at 40 kt or more; with parallel runways the nearest centreline wins. An estimate, not an official source: a quiet airport can show no runway (empty in_use). Runways from OurAirports (public domain), refreshed nightly. One request. https://flyitalyadsb.com/data/api/docs/endpoints/#runway-in-use",
         "tags": [
           "live"
         ],
@@ -1414,7 +1414,7 @@
     "/v2/history/{icao}/{date}": {
       "get": {
         "summary": "One aircraft's track for one day",
-        "description": "readsb's trace_full file for that aircraft and day, passed through as written. From 2022-04-10 to 2023-10-04 the archive holds imported Virtual Radar Server data: only the first and last point of each flight (\"version\": \"vrs-basestation-import\"). The current day is built from readsb's live trace files (X-History-Source live), or from the overflights store once readsb no longer has the aircraft (store: position, altitude, flags, source and callsign only); it may answer 503 while a file is being written. With since, only the points after that time, the rest of the file unchanged (X-Since-Applied: 1). https://flyitalyadsb.com/en/data/api/docs/endpoints/#since",
+        "description": "readsb's trace_full file for that aircraft and day, passed through as written. From 2022-04-10 to 2023-10-04 the archive holds imported Virtual Radar Server data: only the first and last point of each flight (\"version\": \"vrs-basestation-import\"). The current day is built from readsb's live trace files (X-History-Source live), or from the overflights store once readsb no longer has the aircraft (store: position, altitude, flags, source and callsign only); it may answer 503 while a file is being written. With since, only the points after that time, the rest of the file unchanged (X-Since-Applied: 1). https://flyitalyadsb.com/data/api/docs/endpoints/#since",
         "tags": [
           "history"
         ],
@@ -1617,7 +1617,7 @@
     "/v2/overflights": {
       "get": {
         "summary": "Aircraft that flew over a place in a time window",
-        "description": "Every aircraft whose recorded track passed within `dist` km of the point between `from` and `to`, one entry per aircraft, sorted by the time of its closest point. Tracks are interpolated between received positions (gaps over 5 minutes are not). Covers the days since 2026-08-17, the current day up to about 10 minutes ago, and the periods not searched are listed in `coverage.gaps`. One request per call. The maximum `dist` and window depend on the plan (Free 10 km / 6 h, Starter 25 km / 24 h, others 50 km / 24 h): https://flyitalyadsb.com/en/data/api/#piani. Aircraft data only: registration, type, description and dbFlags, never the owner or operator.",
+        "description": "Every aircraft whose recorded track passed within `dist` km of the point between `from` and `to`, one entry per aircraft, sorted by the time of its closest point. Tracks are interpolated between received positions (gaps over 5 minutes are not). Covers the days since 2026-08-17, the current day up to about 10 minutes ago, and the periods not searched are listed in `coverage.gaps`. One request per call. The maximum `dist` and window depend on the plan (Free 10 km / 6 h, Starter 25 km / 24 h, others 50 km / 24 h): https://flyitalyadsb.com/data/api/#piani. Aircraft data only: registration, type, description and dbFlags, never the owner or operator.",
         "tags": [
           "history"
         ],
@@ -1764,7 +1764,7 @@
     "/v2/flights/callsign/{callsign}": {
       "get": {
         "summary": "Flight history of a callsign, and its usual routes",
-        "description": "The flights of a callsign the network observed in the last days, newest first, and its usual routes (`usual`, with how many times each was flown). The callsign takes the same forms as /v2/callsign, so a flight number works too (matched_as/matched_value say which form matched). A callsign with no flights answers 200 with count 0. How far back `days` can go depends on the plan: https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights-depth. On Fleet the JSON answer also carries `today`: the flights since `since` (today, UTC), from takeoffs and landings detected in real time, with an estimated arrival time for an aircraft in flight; on other plans `today` is {available: false, error, plans}. These answers are cached privately for at most 15 seconds. https://flyitalyadsb.com/en/data/api/docs/endpoints/#todays-flights",
+        "description": "The flights of a callsign the network observed in the last days, newest first, and its usual routes (`usual`, with how many times each was flown). The callsign takes the same forms as /v2/callsign, so a flight number works too (matched_as/matched_value say which form matched). A callsign with no flights answers 200 with count 0. How far back `days` can go depends on the plan: https://flyitalyadsb.com/data/api/docs/endpoints/#observed-flights-depth. On Fleet the JSON answer also carries `today`: the flights since `since` (today, UTC), from takeoffs and landings detected in real time, with an estimated arrival time for an aircraft in flight; on other plans `today` is {available: false, error, plans}. These answers are cached privately for at most 15 seconds. https://flyitalyadsb.com/data/api/docs/endpoints/#todays-flights",
         "tags": [
           "flights"
         ],
@@ -1793,7 +1793,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The callsign's observed flights.",
+            "description": "The callsign's flight history: the flights the network saw.",
             "headers": {
               "X-FIA-Plan": {
                 "$ref": "#/components/headers/X-FIA-Plan"
@@ -1845,7 +1845,7 @@
     "/v2/flights/icao/{hex}": {
       "get": {
         "summary": "Flight history of one aircraft (flight log)",
-        "description": "One aircraft's observed flights between two UTC days (default the last 7 available days, at most 31 per request), newest first, with a summary (flights, minutes, airports) for flight hours. An aircraft with no flights in the period answers 200 with count 0. `format=csv` returns the same flights as a CSV flight log (text/csv), one row per flight, oldest first. How far back `from` can go depends on the plan (403 code flights-depth beyond it, not counted): https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights-depth. On Fleet the JSON answer also carries `today`: the flights since `since` (today, UTC), from takeoffs and landings detected in real time, with an estimated arrival time for an aircraft in flight; on other plans `today` is {available: false, error, plans}. These answers are cached privately for at most 15 seconds. https://flyitalyadsb.com/en/data/api/docs/endpoints/#todays-flights",
+        "description": "One aircraft's flight history (the flights the network saw) between two UTC days (default the last 7 available days, at most 31 per request), newest first, with a summary (flights, minutes, airports) for flight hours. An aircraft with no flights in the period answers 200 with count 0. `format=csv` returns the same flights as a CSV flight log (text/csv), one row per flight, oldest first. How far back `from` can go depends on the plan (403 code flights-depth beyond it, not counted): https://flyitalyadsb.com/data/api/docs/endpoints/#observed-flights-depth. On Fleet the JSON answer also carries `today`: the flights since `since` (today, UTC), from takeoffs and landings detected in real time, with an estimated arrival time for an aircraft in flight; on other plans `today` is {available: false, error, plans}. These answers are cached privately for at most 15 seconds. https://flyitalyadsb.com/data/api/docs/endpoints/#todays-flights",
         "tags": [
           "flights"
         ],
@@ -1894,7 +1894,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The aircraft's observed flights.",
+            "description": "The aircraft's flight history: the flights the network saw.",
             "headers": {
               "X-FIA-Plan": {
                 "$ref": "#/components/headers/X-FIA-Plan"
@@ -1952,7 +1952,7 @@
     "/v2/flights/reg/{reg}": {
       "get": {
         "summary": "Flight history of one aircraft, by registration",
-        "description": "One aircraft's observed flights between two UTC days (default the last 7 available days, at most 31 per request), newest first, with a summary (flights, minutes, airports) for flight hours. An aircraft with no flights in the period answers 200 with count 0. `format=csv` returns the same flights as a CSV flight log (text/csv), one row per flight, oldest first. How far back `from` can go depends on the plan (403 code flights-depth beyond it, not counted): https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights-depth. On Fleet the JSON answer also carries `today`: the flights since `since` (today, UTC), from takeoffs and landings detected in real time, with an estimated arrival time for an aircraft in flight; on other plans `today` is {available: false, error, plans}. These answers are cached privately for at most 15 seconds. https://flyitalyadsb.com/en/data/api/docs/endpoints/#todays-flights",
+        "description": "One aircraft's flight history (the flights the network saw) between two UTC days (default the last 7 available days, at most 31 per request), newest first, with a summary (flights, minutes, airports) for flight hours. An aircraft with no flights in the period answers 200 with count 0. `format=csv` returns the same flights as a CSV flight log (text/csv), one row per flight, oldest first. How far back `from` can go depends on the plan (403 code flights-depth beyond it, not counted): https://flyitalyadsb.com/data/api/docs/endpoints/#observed-flights-depth. On Fleet the JSON answer also carries `today`: the flights since `since` (today, UTC), from takeoffs and landings detected in real time, with an estimated arrival time for an aircraft in flight; on other plans `today` is {available: false, error, plans}. These answers are cached privately for at most 15 seconds. https://flyitalyadsb.com/data/api/docs/endpoints/#todays-flights",
         "tags": [
           "flights"
         ],
@@ -2001,7 +2001,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The aircraft's observed flights.",
+            "description": "The aircraft's flight history: the flights the network saw.",
             "headers": {
               "X-FIA-Plan": {
                 "$ref": "#/components/headers/X-FIA-Plan"
@@ -2059,7 +2059,7 @@
     "/v2/flights/airport/{code}": {
       "get": {
         "summary": "Departures or arrivals observed at an airport on one day",
-        "description": "The flights observed leaving (or reaching) an airport on one UTC day, sorted by time. How far back `date` can go depends on the plan: https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights-depth",
+        "description": "The flights observed leaving (or reaching) an airport on one UTC day, sorted by time. How far back `date` can go depends on the plan: https://flyitalyadsb.com/data/api/docs/endpoints/#observed-flights-depth",
         "tags": [
           "flights"
         ],
@@ -2162,7 +2162,7 @@
     "/v2/flights/route/{from}/{to}": {
       "get": {
         "summary": "Find a flight by route: the callsigns observed between two airports",
-        "description": "For when the route and roughly the time are known but not the callsign (some airlines mostly fly callsigns that are not the flight number). The callsigns observed flying from one airport to the other in the last days, most flights first, each with its usual departure time (UTC, median), usual duration, last day, up to three aircraft and, when an aircraft with that callsign is flying now, its live record. Observed by the network, not airline schedules. https://flyitalyadsb.com/en/data/api/docs/endpoints/#find-my-flight",
+        "description": "For when the route and roughly the time are known but not the callsign (some airlines mostly fly callsigns that are not the flight number). The callsigns observed flying from one airport to the other in the last days, most flights first, each with its usual departure time (UTC, median), usual duration, last day, up to three aircraft and, when an aircraft with that callsign is flying now, its live record. Observed by the network, not airline schedules. https://flyitalyadsb.com/data/api/docs/endpoints/#find-my-flight",
         "tags": [
           "flights"
         ],
@@ -2403,7 +2403,7 @@
     "/v2/events": {
       "get": {
         "summary": "Emergencies and notable aircraft within a radius since a time",
-        "description": "Events recorded by the network: emergencies (squawk 7500/7600/7700 or the ADS-B emergency status, not \"lifeguard\"), military aircraft and \"interesting\" aircraft (dbFlags bits 0 and 1). One event per aircraft, kind and ~0.5° grid cell it entered, so a long flight appears once per cell; a new event for the same cell only after 30 (emergency) or 60 minutes away. Newest first. Counted as one request; the plan's radius applies. https://flyitalyadsb.com/en/data/api/docs/alerts/",
+        "description": "Events recorded by the network: emergencies (squawk 7500/7600/7700 or the ADS-B emergency status, not \"lifeguard\"), military aircraft and \"interesting\" aircraft (dbFlags bits 0 and 1). One event per aircraft, kind and ~0.5° grid cell it entered, so a long flight appears once per cell; a new event for the same cell only after 30 (emergency) or 60 minutes away. Newest first. Counted as one request; the plan's radius applies. https://flyitalyadsb.com/data/api/docs/alerts/",
         "tags": [
           "events"
         ],
@@ -2572,7 +2572,7 @@
       },
       "post": {
         "summary": "Create a webhook",
-        "description": "Paid plans only, at most 5 per account. The URL must be https on port 443 or 8443 and resolve only to public addresses. The answer carries the signing secret, shown this once. An area webhook has lat, lon and dist (capped by the plan's radius) and area kinds. A webhook for the watched aircraft (Fleet) has kinds takeoff and/or landing and no area: it receives flight.takeoff, flight.landing and flight.landing_retracted for every aircraft in /v2/watch. https://flyitalyadsb.com/en/data/api/docs/alerts/#aircraft",
+        "description": "Paid plans only, at most 5 per account. The URL must be https on port 443 or 8443 and resolve only to public addresses. The answer carries the signing secret, shown this once. An area webhook has lat, lon and dist (capped by the plan's radius) and area kinds. A webhook for the watched aircraft (Fleet) has kinds takeoff and/or landing and no area: it receives flight.takeoff, flight.landing and flight.landing_retracted for every aircraft in /v2/watch. https://flyitalyadsb.com/data/api/docs/alerts/#aircraft",
         "tags": [
           "webhooks"
         ],
@@ -3000,7 +3000,7 @@
     "/v2/watch": {
       "get": {
         "summary": "The account's watched aircraft",
-        "description": "The aircraft whose takeoffs and landings the account's flight webhooks receive, with the plan's max. Any plan. Not counted as a request (at most 20 webhook and watch calls a minute per key). https://flyitalyadsb.com/en/data/api/docs/alerts/#aircraft",
+        "description": "The aircraft whose takeoffs and landings the account's flight webhooks receive, with the plan's max. Any plan. Not counted as a request (at most 20 webhook and watch calls a minute per key). https://flyitalyadsb.com/data/api/docs/alerts/#aircraft",
         "tags": [
           "watch"
         ],
@@ -3035,7 +3035,7 @@
       },
       "post": {
         "summary": "Watch aircraft",
-        "description": "Adds up to 50 aircraft in one request, by ICAO address, registration or callsign. Fleet only (up to 25). An aircraft already on the list counts in already_watched. All or nothing: an invalid aircraft (400) or one over the plan's max (409) adds none. Not counted as a request. https://flyitalyadsb.com/en/data/api/docs/alerts/#aircraft",
+        "description": "Adds up to 50 aircraft in one request, by ICAO address, registration or callsign. Fleet only (up to 25). An aircraft already on the list counts in already_watched. All or nothing: an invalid aircraft (400) or one over the plan's max (409) adds none. Not counted as a request. https://flyitalyadsb.com/data/api/docs/alerts/#aircraft",
         "tags": [
           "watch"
         ],
@@ -3160,7 +3160,7 @@
     "/v2/watch/remove": {
       "post": {
         "summary": "Stop watching aircraft",
-        "description": "By aircraft, written as when adding, or by ids from the list. Any plan. Not counted as a request. https://flyitalyadsb.com/en/data/api/docs/alerts/#aircraft",
+        "description": "By aircraft, written as when adding, or by ids from the list. Any plan. Not counted as a request. https://flyitalyadsb.com/data/api/docs/alerts/#aircraft",
         "tags": [
           "watch"
         ],
@@ -3431,7 +3431,7 @@
     "trafficEvent": {
       "post": {
         "summary": "A notable-traffic event, sent to your webhook URL",
-        "description": "Signed with Standard Webhooks (https://www.standardwebhooks.com/): HMAC-SHA256 with the base64-decoded part of the secret after \"whsec_\", over \"{webhook-id}.{webhook-timestamp}.{raw body}\". Reject a timestamp more than 5 minutes away and dedupe on webhook-id, which is the same on every retry. Answer 2xx within 10 seconds; anything else (redirects included) is retried 6 times over about 5 hours. https://flyitalyadsb.com/en/data/api/docs/alerts/",
+        "description": "Signed with Standard Webhooks (https://www.standardwebhooks.com/): HMAC-SHA256 with the base64-decoded part of the secret after \"whsec_\", over \"{webhook-id}.{webhook-timestamp}.{raw body}\". Reject a timestamp more than 5 minutes away and dedupe on webhook-id, which is the same on every retry. Answer 2xx within 10 seconds; anything else (redirects included) is retried 6 times over about 5 hours. https://flyitalyadsb.com/data/api/docs/alerts/",
         "tags": [
           "webhooks"
         ],
@@ -3485,7 +3485,7 @@
     "flightAlert": {
       "post": {
         "summary": "A takeoff or landing of a watched aircraft, sent to a takeoff/landing webhook (Fleet)",
-        "description": "Signed and retried like trafficEvent. Detected in real time from the network's receivers, best effort: a takeoff or landing the network does not see is not sent. One alert per aircraft and kind every 20 minutes (circuits). A landing deduced from the aircraft disappearing near a field comes about 2.5 minutes after its last signal; if the aircraft is seen flying again within 10 minutes, flight.landing_retracted follows (same event_id), only to the webhooks that got the landing. Events detected more than 15 minutes earlier are never sent. https://flyitalyadsb.com/en/data/api/docs/alerts/#aircraft",
+        "description": "Signed and retried like trafficEvent. Detected in real time from the network's receivers, best effort: a takeoff or landing the network does not see is not sent. One alert per aircraft and kind every 20 minutes (circuits). A landing deduced from the aircraft disappearing near a field comes about 2.5 minutes after its last signal; if the aircraft is seen flying again within 10 minutes, flight.landing_retracted follows (same event_id), only to the webhooks that got the landing. Events detected more than 15 minutes earlier are never sent. https://flyitalyadsb.com/data/api/docs/alerts/#aircraft",
         "tags": [
           "webhooks"
         ],
@@ -3550,7 +3550,7 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-Api-Key",
-        "description": "Self-serve: https://flyitalyadsb.com/en/data/api/#api-key"
+        "description": "Self-serve: https://flyitalyadsb.com/data/api/#api-key"
       }
     },
     "headers": {
@@ -3631,7 +3631,7 @@
         }
       },
       "FlightsDepth": {
-        "description": "Further back than the plan's observed-flights depth (code \"flights-depth\"); not counted. https://flyitalyadsb.com/en/data/api/docs/endpoints/#observed-flights-depth",
+        "description": "Further back than the plan's observed-flights depth (code \"flights-depth\"); not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#observed-flights-depth",
         "content": {
           "application/json": {
             "schema": {
@@ -3969,7 +3969,7 @@
         }
       },
       "TodayFlights": {
-        "description": "Today's flights (JSON answers of /v2/flights/icao, /hex, /reg, /callsign). https://flyitalyadsb.com/en/data/api/docs/endpoints/#todays-flights",
+        "description": "Today's flights (JSON answers of /v2/flights/icao, /hex, /reg, /callsign). https://flyitalyadsb.com/data/api/docs/endpoints/#todays-flights",
         "oneOf": [
           {
             "title": "Today (Fleet)",
@@ -4158,7 +4158,7 @@
       },
       "FlightEta": {
         "type": "object",
-        "description": "in_flight only, and only an estimate: the usual destination of the callsign in the observed flights (when its usual route leaves from today's takeoff airport) and the straight-line time at the current ground speed. Absent without a usual route or under 80 knots; late while the aircraft is still climbing; never a schedule.",
+        "description": "in_flight only, and only an estimate: the usual destination of the callsign in the flight history (when its usual route leaves from today's takeoff airport) and the straight-line time at the current ground speed. Absent without a usual route or under 80 knots; late while the aircraft is still climbing; never a schedule.",
         "properties": {
           "airport": {
             "type": "string"
@@ -5269,7 +5269,7 @@
       },
       "ObservedRoute": {
         "type": "object",
-        "description": "Only with with=route on a list: the most frequent route of the callsign in the latest 7 days of observed flights. Absent when unknown. Not a schedule.",
+        "description": "Only with with=route on a list: the most frequent route of the callsign in the latest 7 days of flight history. Absent when unknown. Not a schedule.",
         "properties": {
           "from": {
             "type": "string",
