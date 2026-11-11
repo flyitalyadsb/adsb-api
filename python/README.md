@@ -39,7 +39,7 @@ Every method is one request on your key; the account calls through `request()` (
 | Method | Endpoint | Returns |
 | --- | --- | --- |
 | `near(lat, lon, radius_km)` | `/lat/{lat}/lon/{lon}/dist/{km}` | `AircraftList`: every aircraft within the radius, anywhere on Earth |
-| `world()` | `/lat/0/lon/0/dist/20040` | `AircraftList`: the whole world in one request (Pro and Business plans) |
+| `world()` | `/lat/0/lon/0/dist/20040` | `AircraftList`: the whole world in one request (Pro and Fleet plans) |
 | `by_icao(icao)` | `/icao/{hex}` | `Aircraft`, or `None` if it isn't seen now |
 | `by_callsign(callsign)` | `/callsign/{callsign}` | `Aircraft` or `None` |
 | `by_registration(registration)` | `/reg/{reg}` | `Aircraft` or `None` |
@@ -80,14 +80,16 @@ if dates.dates:
 
 Choose mostly by area: each request asks for the aircraft in a circle, and the largest circle depends on the plan. Commercial use is allowed on every plan, Free included.
 
-| Plan | Price per month (before tax) | Requests/min (per key) | Requests/month | Radius per request | Overflights |
-| --- | --- | --- | --- | --- | --- |
-| Free | €0 | 30 | 300,000 | up to 500 km | 10 km, 6 h window |
-| Starter | €9 | 60 | 1,000,000 | up to 1,000 km | 25 km, 24 h |
-| Pro | €49 | 300 | 10,000,000 | whole world | 50 km, 24 h |
-| Business | €249 | 1,000 | 50,000,000 | whole world | 50 km, 24 h |
+| Plan | Price per month (before tax) | Requests/min (per key) | Requests/month | Radius per request | Tracks | Overflights |
+| --- | --- | --- | --- | --- | --- | --- |
+| Free | €0 | 30 | 300,000 | up to 500 km | last 7 days | not included |
+| Starter | €9 | 60 | 1,000,000 | up to 1,000 km | last 30 days | 10 km, 6 h window |
+| Pro | €49 | 300 | 10,000,000 | whole world | last 90 days | 50 km, 24 h |
+| Fleet | €149 | 300 | 10,000,000 | whole world | the whole archive | 50 km, 24 h |
 
 - The Free plan also has a cap of 100 requests a minute per IP.
+- Fleet adds a list of up to 25 watched aircraft, with a webhook at every takeoff and landing.
+- More than 25 aircraft, more volume, an SLA or reselling the data as an API or feed: [get in touch](https://flyitalyadsb.com/contact/?utm_source=pypi&utm_campaign=python-client).
 - A paid plan raises the limits of the key you already have.
 - Requests refused for a limit are not counted, and nothing is ever billed beyond the plan.
 - The monthly counter resets on the 1st. No plan includes an SLA: the service is best effort.
@@ -129,7 +131,7 @@ The client never hammers the API. On a 429 or 503 that carries `Retry-After` of 
 - One record per aircraft in readsb's aircraft.json format: ICAO address, position, altitude, speed, track, vertical rate, squawk, category, and the military, PIA and LADD flags. Registration and ICAO type are present for about 99% of aircraft, callsign for about 98%.
 - Unfiltered: military, PIA and LADD aircraft are flagged, not hidden. Positions from ADS-B and from the network's own MLAT, which covers many military aircraft.
 - The picture refreshes every half second. Coverage follows the receivers, worldwide: check an area with the [coverage tool](https://flyitalyadsb.com/data/coverage/?utm_source=pypi&utm_campaign=python-client) before you build on it.
-- History: per-aircraft daily tracks for every day since 2026-08-17, plus 2022 to 2024 with gaps. Overflights of a place since 2026-08-17.
+- History: per-aircraft daily tracks for every day since 2023-03-03 except 2026-05-05 and 2026-05-06 (from 2022-04-10 to 2023-03-02 only the first and last point of each flight). Overflights of a place since 2026-08-17.
 - Not included: routes (departure and arrival airports), schedules and photos.
 
 ## Licence and credit

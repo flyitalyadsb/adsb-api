@@ -151,7 +151,7 @@ class Client:
         """Every aircraft within ``radius_km`` kilometres of a point, anywhere on Earth.
 
         ``/lat/{lat}/lon/{lon}/dist/{km}``. The largest radius depends on the plan:
-        500 km on Free, 1,000 km on Starter, no limit on Pro and Business. Above it the
+        500 km on Free, 1,000 km on Starter, no limit on Pro and Fleet. Above it the
         answer is ``PlanLimitError`` (``reason == "radius"``, not counted).
         """
         _check_point(lat, lon)
@@ -161,7 +161,7 @@ class Client:
     def world(self) -> AircraftList:
         """Every aircraft the network sees now, worldwide, in one request.
 
-        Needs the Pro or Business plan (``/lat/0/lon/0/dist/20040``); on Free and
+        Needs the Pro or Fleet plan (``/lat/0/lon/0/dist/20040``); on Free and
         Starter it raises ``PlanLimitError`` with ``reason == "radius"``.
         """
         return self.near(0, 0, WORLD_RADIUS_KM)
@@ -246,7 +246,7 @@ class Client:
 
         ``/overflights?lat=&lon=&dist=&from=&to=``: one entry per aircraft, with its closest
         point. Since 2026-08-17, up to about 10 minutes ago. Radius and window per plan:
-        Free 10 km / 6 h, Starter 25 km / 24 h, Pro and Business 50 km / 24 h.
+        Starter 10 km / 6 h, Pro and Fleet 50 km / 24 h; not included on Free.
 
         Args:
             start, end: ``datetime`` (naive = UTC), Unix seconds or ISO 8601 strings.

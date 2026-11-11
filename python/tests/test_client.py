@@ -322,7 +322,7 @@ def test_overflights_limit_and_paid_plan(api: FakeApi) -> None:
         "error": "dist above the free plan maximum of 10 km for overflights",
         "max_dist_km": 10, "max_window_hours": 6}))
     api.add("POST", "/v2/webhooks", reply(403, {
-        "error": "webhooks are available on paid plans (Starter, Pro, Business)",
+        "error": "webhooks are available on paid plans (Starter, Pro, Fleet)",
         "code": "paid-plan-required", "plan": "free", "plans": "https://example.test/plans"}))
     c = client(api)
     with pytest.raises(PlanLimitError) as info:
