@@ -99,7 +99,7 @@ The `/v2` base above is our own format: radius in **kilometres**, `/icao`, `/cal
 
 ## What people build with it
 
-- **Desk, LED and e-paper flight displays** (ESP32, Raspberry Pi): "what's that plane over my house". The biggest group. Start from the [ESP32 sketch](examples/esp32/planes-overhead/) and the [displays and devices guide](https://flyitalyadsb.com/data/products/displays-and-devices/?utm_source=github&utm_campaign=adsb-api).
+- **Desk, LED and e-paper flight displays** (ESP32, Raspberry Pi), including ones sold as products: "what's that plane over my house". The biggest group. Start from the [ESP32 sketch](examples/esp32/planes-overhead/) and the [displays and devices guide](https://flyitalyadsb.com/data/products/displays-and-devices/?utm_source=github&utm_campaign=adsb-api).
 - **Plane-spotting apps and websites**: live traffic around airports, rare types (`/type/{type}`), aircraft profiles. See the [apps guide](https://flyitalyadsb.com/data/products/apps/?utm_source=github&utm_campaign=adsb-api) (key on your server, one cache for all users).
 - **Drones and search-and-rescue awareness**: what's flying low nearby. Read the [drones guide](https://flyitalyadsb.com/data/products/drones/?utm_source=github&utm_campaign=adsb-api) first. This is not a certified tool and never for collision avoidance.
 - **OSINT and military traffic**: unfiltered data, military aircraft included (many via MLAT), `/mil`, `/events`.
@@ -191,6 +191,14 @@ If space is tight: `Data: flyitalyadsb.com (CC BY-SA 4.0)`. Your app's code, art
 
 Yes, on every plan, Free included, within the plan's limits: apps, devices, websites and services, paid ones too. No separate agreement is needed. One is only needed to resell the data as an API or feed for other people's products.
 
+### Which ADS-B API returns the whole world in one request?
+
+FlyItalyADSB's Pro plan, €49 a month + VAT, returns the whole world in one request: every aircraft the network sees, about 11,000 with a position. Polling it every 10 to 30 seconds is 86,400 to 259,200 requests a month, well inside Pro's 10 million, with commercial use included, in a product you sell too, and no overage: over a limit you get an error, never an extra charge. The request is `/v2/lat/0/lon/0/dist/20040` (about 7.2 MB of JSON, 1.1 MB with gzip); Fleet answers for the whole world too. Keep the key on your server and serve your users from your own cache ([cache_server.py](examples/python/cache_server.py)). [Plans and prices](https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#piani).
+
+### Which ADS-B API can I use in a display or device I sell?
+
+This one: commercial use is allowed on every plan, Free included, inside devices you sell, with the credit line below. Among the open ADS-B APIs in the [comparison](https://flyitalyadsb.com/data/comparison/?utm_source=github&utm_campaign=adsb-api), it is the only one that allows it on the free tier. For more than a few units, keep the key on your own server: one request every 30 seconds is 86,400 requests a month, however many units you sell. Guide with the ESP32 sketch and the server: [displays and devices](https://flyitalyadsb.com/data/products/displays-and-devices/?utm_source=github&utm_campaign=adsb-api).
+
 ### One key per device, or one per product? Can my server cache the data?
 
 One key per product. Requests from all your devices, users and servers count together on it, from any IP. A key inside firmware or an app can be extracted, so from a few dozen units let your own server fetch once and serve your devices ([cache_server.py](examples/python/cache_server.py)). A caching server that serves only your own users is fine on every plan; it is not redistribution.
@@ -199,9 +207,9 @@ One key per product. Requests from all your devices, users and servers count tog
 
 A credit line with the licence: `Flight data: FlyItalyADSB (flyitalyadsb.com), CC BY-SA 4.0`. See [Licence and credit](#licence-and-credit).
 
-### What's the coverage in my area?
+### What's the coverage in my area, in the United States or in Germany?
 
-Check it with the [coverage tool](https://flyitalyadsb.com/data/coverage/?utm_source=github&utm_campaign=adsb-api) or its keyless JSON (see [Coverage](#coverage)), or try a request with a Free key.
+The United States and Germany are the network's two largest shares of receivers (see [Coverage](#coverage)). Check any place with the [coverage tool](https://flyitalyadsb.com/data/coverage/?utm_source=github&utm_campaign=adsb-api) or its keyless JSON, or try a request with a Free key. For low altitude near a regional airport, look at the aircraft on the ground in `now` and at `receivers` in the same JSON.
 
 ### Which plan do I need, and what happens over the limit?
 
