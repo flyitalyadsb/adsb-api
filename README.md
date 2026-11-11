@@ -74,7 +74,7 @@ Base URL `https://api.flyitalyadsb.com/v2`. Every request carries the key in the
 | `/mil` · `/pia` · `/ladd` | Military, PIA and LADD aircraft seen now, network-wide |
 | `/sqk/{squawk}` · `/type/{type}` | Aircraft squawking a code (7700, 7600, 7500) or of an ICAO type (A320, B738, R44) |
 | `/profile/{icao}` | One aircraft in one call: identity, live status, first and last day in the history |
-| `/history/{icao}` · `/history/{icao}/{YYYY-MM-DD}` | The days with a track for an aircraft, and one day's track (since 2022, with gaps) |
+| `/history/{icao}` · `/history/{icao}/{YYYY-MM-DD}` | The days with a track for an aircraft, and one day's track (every day since 2023-03-03; from 2022-04-10 only the first and last point of each flight) |
 | `/overflights?lat=&lon=&dist=&from=&to=` | The aircraft that flew over a place between two times (since 2026-08-17) |
 | `/events?lat=&lon=&dist=` | Emergencies, military and other notable traffic in an area, up to 7 days back |
 | `POST /webhooks` | The same events pushed to your URL, signed (paid plans) |
@@ -216,7 +216,7 @@ Pick by radius first, then size the volume as requests per minute per device × 
 
 ### Is there history?
 
-Yes, self-serve with the same key: per-aircraft daily tracks since 2022 (with gaps; every day since 2026-08-17) and overflights of a place since 2026-08-17. See [history](https://flyitalyadsb.com/data/api/docs/history/?utm_source=github&utm_campaign=adsb-api).
+Yes, self-serve with the same key: per-aircraft daily tracks, every day since 2023-03-03 except 2026-05-05 and 2026-05-06 (from 2022-04-10 to 2023-03-02 only the first and last point of each flight), and overflights of a place since 2026-08-17. See [history](https://flyitalyadsb.com/data/api/docs/history/?utm_source=github&utm_campaign=adsb-api).
 
 ### Can I call it from a web page?
 
