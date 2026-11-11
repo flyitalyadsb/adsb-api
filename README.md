@@ -148,7 +148,7 @@ Freshness: the picture refreshes every half second, on the live map and in the A
 
 ## Plans and limits
 
-FlyItalyADSB is a community project. The map and the Free plan stay free, commercial use included, within their limits. Paid plans are for heavy API users and help cover the cost of servers and bandwidth. A paid plan raises the limits of the key you already have.
+The map and the Free plan stay free, commercial use included, within their limits. Paid plans are for heavy API users: Pro and Fleet return the whole world in one request, and a paid plan raises the limits of the key you already have. Self-serve plans are best effort; an SLA can be agreed in a tailored agreement. FlyItalyADSB is operated by Nesso Labs S.r.l. (Brescia, Italy), certified to ISO/IEC 27001; the receivers are run by volunteers.
 
 Choose mostly by area: each request asks for the aircraft in a circle, and the largest circle depends on the plan.
 
