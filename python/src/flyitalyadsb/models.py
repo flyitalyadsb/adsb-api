@@ -73,7 +73,7 @@ class Limits:
     """The key's plan and usage, from the ``X-FIA-*`` headers of a response."""
 
     plan: Optional[str] = None
-    """``X-FIA-Plan``: free, feeder, starter, pro, business or enterprise."""
+    """``X-FIA-Plan``: free, feeder, starter, pro, fleet or enterprise."""
     limit_per_min: Optional[int] = None
     """``X-FIA-Limit-Per-Min``: the plan's requests per minute."""
     quota_month: Optional[int] = None

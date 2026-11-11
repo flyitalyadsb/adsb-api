@@ -72,7 +72,7 @@ class PlanLimitError(ApiError):
     ``reason`` says which limit:
 
     - ``"radius"`` (403): the radius is above the plan's maximum, see ``max_radius_km``.
-      Shrink it, split the area, or upgrade: the whole world in one request needs Pro or Business.
+      Shrink it, split the area, or upgrade: the whole world in one request needs Pro or Fleet.
     - ``"overflights"`` (403): the overflights radius or time window is above the plan's.
     - ``"paid_plan"`` (403): the feature needs a paid plan (webhooks).
     - ``"rate_limit"`` (429): too many requests per minute; wait ``retry_after`` seconds.
