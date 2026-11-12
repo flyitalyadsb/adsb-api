@@ -26,7 +26,7 @@
 - The Free plan also has a cap of 100 requests/min per IP.
 - Whole world in one request (`/lat/0/lon/0/dist/20040`): Pro or Fleet.
 <!-- sync:plans:end -->
-- Over a limit: 429 (Retry-After) or 403 (radius); refused requests are not counted and never billed. No SLA on any plan; paid plans help cover server and bandwidth costs.
+- Over a limit: 429 (Retry-After) or 403 (radius); refused requests are not counted and never billed. Self-serve plans are best effort, no SLA; an SLA by tailored agreement. Operated by Nesso Labs S.r.l. (ISO/IEC 27001).
 - Feeders (people who run a receiver for the network) get Pro's limits and features on their Free keys at no cost, for non-commercial use: https://flyitalyadsb.com/community/feeder/?utm_source=github&utm_campaign=adsb-api
 - More than 25 watched aircraft, more volume, an SLA, or reselling the data as an API or feed for other people's products: https://flyitalyadsb.com/contact/?utm_source=github&utm_campaign=adsb-api
 - Current plans: https://flyitalyadsb.com/data/api/?utm_source=github&utm_campaign=adsb-api#piani
