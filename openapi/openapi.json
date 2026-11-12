@@ -4,10 +4,10 @@
     "title": "FlyItalyADSB API",
     "version": "2",
     "summary": "Live and historical aircraft positions worldwide from the FlyItalyADSB community ADS-B/MLAT network. Commercial use allowed on every plan, Free included; the whole world in one request from the Pro plan (€49/month).",
-    "description": "Unfiltered aircraft data (no FAA/LADD/BARR filtering; military aircraft included, many of them via MLAT) from a global community-run receiver network (about 3,200 receivers, densest in North America and Europe; any point on Earth can be queried), as readsb aircraft.json records (the same format as tar1090), plus an ADS-B Exchange v2–compatible variant at /api/aircraft/v2. Every endpoint except the key signup needs an X-Api-Key; keys are self-serve (see /auth.md). Plans and limits: https://flyitalyadsb.com/data/api/#piani. The same key works on the MCP server at https://flyitalyadsb.com/mcp. The same data is also served in the ADS-B Exchange v2 format (same paths, key headers and JSON; radius in nautical miles) at https://api.flyitalyadsb.com/api/aircraft/v2, documented at https://flyitalyadsb.com/data/api/docs/adsbx-v2/.",
+    "description": "Unfiltered aircraft data (no FAA/LADD/BARR filtering; military aircraft included, many of them via MLAT) from a global network of receivers run by volunteers (about 3,200 receivers, densest in North America and Europe; any point on Earth can be queried), as readsb aircraft.json records (the same format as tar1090), plus an ADS-B Exchange v2–compatible variant at /api/aircraft/v2. PIA and LADD aircraft are flagged in the dbFlags bit field (value 4 for PIA, 8 for LADD), so your product can hide them where its market or app store requires. Every endpoint except the key signup needs an X-Api-Key; keys are self-serve (see /auth.md). Plans and limits: https://flyitalyadsb.com/data/api/#piani. The same key works on the MCP server at https://flyitalyadsb.com/mcp. The same data is also served in the ADS-B Exchange v2 format (same paths, key headers and JSON; radius in nautical miles) at https://api.flyitalyadsb.com/api/aircraft/v2, documented at https://flyitalyadsb.com/data/api/docs/adsbx-v2/. Operated by Nesso Labs S.r.l. (ISO/IEC 27001:2022, QMSCERT 160426-7).",
     "termsOfService": "https://flyitalyadsb.com/terms/",
     "contact": {
-      "name": "FlyItalyADSB",
+      "name": "Nesso Labs S.r.l. (FlyItalyADSB)",
       "email": "info@flyitalyadsb.com",
       "url": "https://flyitalyadsb.com/contact/"
     },
@@ -37,7 +37,7 @@
     },
     {
       "name": "history",
-      "description": "Tracks: per-aircraft daily tracks since 2022-04-10, with gaps, and the aircraft that flew over a place (since 2026-08-17)."
+      "description": "Tracks: per-aircraft daily tracks, every day since 2023-03-03 except 2026-05-05 and 2026-05-06, and the first and last point of each flight from 2022-04-10; and the aircraft that flew over a place (since 2026-08-17)."
     },
     {
       "name": "flights",
@@ -1414,7 +1414,7 @@
     "/v2/history/{icao}/{date}": {
       "get": {
         "summary": "One aircraft's track for one day",
-        "description": "readsb's trace_full file for that aircraft and day, passed through as written. From 2022-04-10 to 2023-10-04 the archive holds imported Virtual Radar Server data: only the first and last point of each flight (\"version\": \"vrs-basestation-import\"). The current day is built from readsb's live trace files (X-History-Source live), or from the overflights store once readsb no longer has the aircraft (store: position, altitude, flags, source and callsign only); it may answer 503 while a file is being written. With since, only the points after that time, the rest of the file unchanged (X-Since-Applied: 1). https://flyitalyadsb.com/data/api/docs/endpoints/#since",
+        "description": "readsb's trace_full file for that aircraft and day, passed through as written. From 2022-04-10 to 2023-10-04 the archive also holds imported Virtual Radar Server data: only the first and last point of each flight (\"version\": \"vrs-basestation-import\"). From 2023-03-03 that file is returned only when there is no full track for that aircraft and day. The current day is built from readsb's live trace files (X-History-Source live), or from the overflights store once readsb no longer has the aircraft (store: position, altitude, flags, source and callsign only); it may answer 503 while a file is being written. With since, only the points after that time, the rest of the file unchanged (X-Since-Applied: 1). https://flyitalyadsb.com/data/api/docs/endpoints/#since",
         "tags": [
           "history"
         ],
