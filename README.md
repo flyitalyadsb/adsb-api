@@ -148,7 +148,7 @@ Freshness: the picture refreshes every half second, on the live map and in the A
 
 ## Plans and limits
 
-The map and the Free plan stay free, commercial use included, within their limits. Paid plans are for heavy API users: Pro and Fleet return the whole world in one request, and a paid plan raises the limits of the key you already have. Self-serve plans are best effort; an SLA can be agreed in a tailored agreement. FlyItalyADSB is operated by Nesso Labs S.r.l. (Brescia, Italy), certified to ISO/IEC 27001; the receivers are run by volunteers.
+The map and the Free plan stay free, commercial use included, within their limits. Paid plans are for heavy API users: Pro and Fleet return the whole world in one request, and a paid plan raises the limits of the key you already have. Self-serve plans are best effort; an SLA is available on tailored plans, in a written agreement. FlyItalyADSB is operated by Nesso Labs S.r.l. (Brescia, Italy), certified to ISO/IEC 27001; the receivers are run by volunteers.
 
 Choose mostly by area: each request asks for the aircraft in a circle, and the largest circle depends on the plan.
 
@@ -167,7 +167,7 @@ Choose mostly by area: each request asks for the aircraft in a circle, and the l
 - Over a limit you get `429` (with `Retry-After`) or `403` for too large a radius. Refused requests are not counted and nothing is ever billed beyond the plan.
 - The monthly counter resets on the 1st.
 - Every response carries `X-FIA-Plan`, `X-FIA-Limit-Per-Min`, `X-FIA-Quota-Month` and `X-FIA-Used-Month`.
-- No plan includes an SLA or guaranteed response times; the service is best effort.
+- Self-serve plans are best effort, with no guaranteed response times; an SLA is available on tailored plans, in a written agreement.
 - **Run a receiver?** Feeders get Pro's limits and features on their Free keys at no cost, for non-commercial use. It's how the network grows: [become a feeder](https://flyitalyadsb.com/community/feeder/?utm_source=github&utm_campaign=adsb-api), then turn the perk on in [My API](https://flyitalyadsb.com/data/api/account/?utm_source=github&utm_campaign=adsb-api).
 - More than 25 watched aircraft, more volume, an SLA, or reselling the data as an API or feed for other people's products: [get in touch](https://flyitalyadsb.com/contact/?utm_source=github&utm_campaign=adsb-api).
 
