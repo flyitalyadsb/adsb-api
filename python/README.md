@@ -92,7 +92,7 @@ Choose mostly by area: each request asks for the aircraft in a circle, and the l
 - More than 25 aircraft, more volume, an SLA or reselling the data as an API or feed: [get in touch](https://flyitalyadsb.com/contact/?utm_source=pypi&utm_campaign=python-client).
 - A paid plan raises the limits of the key you already have.
 - Requests refused for a limit are not counted, and nothing is ever billed beyond the plan.
-- The monthly counter resets on the 1st. No plan includes an SLA: the service is best effort.
+- The monthly counter resets on the 1st. Self-serve plans are best effort; an SLA is available on tailored plans, in a written agreement.
 - Current prices and limits are always on the [plans page](https://flyitalyadsb.com/data/api/?utm_source=pypi&utm_campaign=python-client#piani).
 
 `client.limits` (and `.limits` on every result) reports the key's state from the `X-FIA-Plan`, `X-FIA-Limit-Per-Min`, `X-FIA-Quota-Month` and `X-FIA-Used-Month` headers: `plan`, `limit_per_min`, `quota_month`, `used_month` and `remaining_month`.
