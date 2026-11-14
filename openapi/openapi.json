@@ -86,7 +86,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -194,7 +194,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -302,7 +302,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -410,7 +410,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -596,7 +596,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -726,7 +726,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -812,7 +812,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -888,7 +888,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -964,7 +964,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -1050,7 +1050,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -1136,7 +1136,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
@@ -1222,7 +1222,7 @@
             "name": "fields",
             "in": "query",
             "required": false,
-            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category (a fixed list). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
+            "description": "Only these fields of each aircraft, comma-separated. `light` = hex, flight, r, t, lat, lon, alt_baro, gs, track, squawk, seen_pos, category, baro_rate, seen (fields are only added at the end, never removed). Presets and names can be mixed (`light,rssi`). `hex` is always present and first; a field the aircraft does not have is missing, as in the full record. An unknown name: 400 with `allowed` and `presets`, not counted. https://flyitalyadsb.com/data/api/docs/endpoints/#list-options",
             "schema": {
               "type": "string",
               "examples": [
